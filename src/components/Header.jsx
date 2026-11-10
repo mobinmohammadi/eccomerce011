@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { IoMdPhonePortrait, IoIosArrowDown } from "react-icons/io";
 import {
@@ -15,6 +15,7 @@ import {
 import { FaTwitter, FaHeart, FaCartShopping } from "react-icons/fa6";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useSelector } from "react-redux";
+import { get_cart_product } from "../store/Reducers/cartReducer";
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -26,11 +27,11 @@ const Header = () => {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(searchValueInUrl || "");
   const [category, setCategory] = useState(categoryInUrl || "");
-  const { categorys } = useSelector((state) => state.home);
-  const { userInfo } = useSelector((state) => state.auth);
+  const { categorys } = useSelector((state) => state.home)
+  const { userInfo } = useSelector((state) => state.auth)
+  const { cart_product_count ,cart_products } = useSelector((state) => state.cart)
 
-  const wishlist_count = 4;
-  const cart_count = 4;
+
 
   const navLinks = [
     { to: "/", label: "HOME" },
@@ -41,6 +42,10 @@ const Header = () => {
   ];
 
   const navigate = useNavigate();
+
+  useEffect(() =>{
+    get_cart_product()
+  },[cart_products])
 
   const search = (e) => {
     e.preventDefault();
@@ -105,7 +110,7 @@ const Header = () => {
 
               <Link
                 className="flex items-center gap-2 text-xs font-semibold hover:text-emerald-400 transition-colors"
-                to={userInfo ? "/dashboard" : "/login"}
+                to={userInfo ? userInfo.name : "/login"}
               >
                 {userInfo ? <FaUser size={12} /> : <FaLock size={12} />}
                 <span>{userInfo?.name || "Login"}</span>
@@ -162,9 +167,9 @@ const Header = () => {
               aria-label="Wishlist"
             >
               <FaHeart size={16} />
-              {wishlist_count > 0 && (
+              {cart_product_count > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-gradient-to-br from-rose-500 to-rose-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow">
-                  {wishlist_count}
+                  {cart_product_count}
                 </span>
               )}
             </Link>
@@ -175,18 +180,18 @@ const Header = () => {
               aria-label="Cart"
             >
               <FaCartShopping size={16} />
-              {cart_count > 0 && (
+              {cart_product_count > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-gradient-to-br from-rose-500 to-rose-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow">
-                  {cart_count}
+                  {cart_product_count}
                 </span>
               )}
             </Link>
 
             <Link
-              to={userInfo ? "/dashboard" : "/login"}
+              to={userInfo ?  userInfo.name : "/login"}
               className="ml-1 px-6 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-[13px] font-semibold hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/40 hover:-translate-y-0.5"
             >
-              {userInfo ? "Dashboard" : "Login"}
+              {userInfo ? userInfo.name : "Login"}
             </Link>
           </div>
         </div>

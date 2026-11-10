@@ -15,9 +15,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-// ==========================================
-// کامپوننت داخلی نظرات (طراحی مدرن)
-// ==========================================
+
 const ModernReviews = () => {
   const [rating, setRating] = useState(5);
   const [hover, setHover] = useState(0);
@@ -37,7 +35,6 @@ const ModernReviews = () => {
 
   return (
     <div className="w-full py-6 font-sans">
-      {/* لیست نظرات */}
       <div className="flex flex-col gap-4 mb-8">
         {reviewsData.map((review) => (
           <div key={review.id} className="bg-white p-4 sm:p-6 rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100 hover:shadow-lg transition-shadow duration-300">
@@ -67,7 +64,6 @@ const ModernReviews = () => {
         ))}
       </div>
 
-      {/* فرم ثبت نظر جدید */}
       <div className="bg-slate-50 p-5 sm:p-8 rounded-2xl border border-slate-200">
         <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
           <HiOutlineChatBubbleLeftRight className="text-[#059473]" />
@@ -113,9 +109,7 @@ const ModernReviews = () => {
   );
 };
 
-// ==========================================
-// کامپوننت اصلی Details
-// ==========================================
+
 const Details = () => {
   const RMCarousel = Carousel.default ? Carousel.default : Carousel;
   const images = [1, 2, 3, 4, 5, 6];
@@ -168,11 +162,10 @@ const Details = () => {
         </div>
       </section>
 
-      {/* ===== محصول اصلی ===== */}
+
       <section>
         <div className='w-[92%] sm:w-[90%] lg:w-[85%] mx-auto'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8'>
-            {/* --- گالری --- */}
             <div>
               <div className='p-3 sm:p-5 border'>
                 <img
@@ -204,7 +197,6 @@ const Details = () => {
               </div>
             </div>
 
-            {/* --- اطلاعات محصول --- */}
             <div className='flex flex-col gap-4 sm:gap-5'>
               <h3 className='text-2xl sm:text-3xl text-slate-600 font-bold'>Product Name</h3>
 
@@ -255,7 +247,6 @@ const Details = () => {
                 </div>
               </div>
 
-              {/* موجودی + شبکه‌های اجتماعی */}
               <div className='flex flex-col sm:flex-row py-4 sm:py-5 gap-4 sm:gap-5'>
                 <div className='w-full sm:w-[150px] text-black font-bold text-base sm:text-xl flex flex-col gap-4 sm:gap-5'>
                   <span>Availability</span>
@@ -282,7 +273,6 @@ const Details = () => {
                 </div>
               </div>
 
-              {/* دکمه‌های خرید */}
               <div className='flex flex-wrap gap-3'>
                 {stock ? (
                   <button className='flex-1 sm:flex-none px-5 sm:px-8 h-[46px] sm:h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#247462] text-white text-sm sm:text-base'>
@@ -298,11 +288,9 @@ const Details = () => {
         </div>
       </section>
 
-      {/* ===== تب‌ها + محصولات پیشنهادی ===== */}
       <section>
         <div className='w-[92%] sm:w-[90%] lg:w-[85%] mx-auto pb-16 mt-10'>
           <div className='flex flex-col lg:flex-row gap-6'>
-            {/* تب‌ها */}
             <div className='w-full lg:w-[72%]'>
               <div className='grid grid-cols-2'>
                 <button
@@ -359,7 +347,6 @@ const Details = () => {
         </div>
       </section>
 
-      {/* ===== Related Products ===== */}
       <section>
         <div className='w-[92%] sm:w-[90%] lg:w-[85%] mx-auto'>
           <h2 className='text-xl sm:text-2xl py-6 sm:py-8 text-slate-600'>Related Products</h2>

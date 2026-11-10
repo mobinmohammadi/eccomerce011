@@ -2,9 +2,18 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link, useNavigate } from "react-router";
 import { IoIosArrowForward } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { get_cart_product } from "../store/Reducers/cartReducer";
 
 const Card = () => {
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(get_cart_product(userInfo.id));
+  }, []);
+
   const card_products = [1, 2];
   const outOfStockProduct = [1, 2];
   const redirect = () => {

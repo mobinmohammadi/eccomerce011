@@ -10,7 +10,7 @@ import { messageClear } from "../../store/Reducers/cartReducer";
 
 const FeatureProducts = ({ products }) => {
   const [endIndex, setEndIndex] = useState(6);
-  const { succsussMessage, errorMessage } = useSelector((state) => state.cart);
+  const { succsussMessage, errorMessage } = useSelector((state) => state.cart)
 
   const dispatch = useDispatch();
   useEffect(() => {
