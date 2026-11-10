@@ -21,10 +21,8 @@ export const get_cart_product = createAsyncThunk(
   "cart/get_cart_product",
   async (userId, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get(`/home/product/get-cart-product/${userId}`, {
-        withCredentials: true,
-      });
-      //    console.log("cart  Data ===> ", data);
+      const { data } = await api.get(`/home/product/get-cart-product/${userId}`)
+         console.log("cart  Data ===> ", data );
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -40,8 +38,9 @@ export const cartReducer = createSlice({
     wishlist_count: 0,
     wishlist: [],
     price: 0,
-    shapping_free: 0,
-    outofstock_products: [],
+    buy_product_item: '',
+    shapping_fee: 0,
+    outOfStockProduct: [],
     succsussMessage: "",
     errorMessage: "",
     loader: false,
@@ -70,15 +69,28 @@ export const cartReducer = createSlice({
         state.loader = true;
       })
       .addCase(get_cart_product.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        
         state.loader = false;
-        state.cart_products = payload.productInBasket;
-        console.log(data);
+        state.cart_products = payload.cart_products;
+        state.price = payload.price;
+        state.cart_product_count = payload.cart_product_count;
+        state.shapping_fee = payload.shapping_fee;
+        state.outOfStockProduct = payload.outofstock_products;
+        state.buy_product_item = payload.buy_product_item;
+
+        console.log(payload);
       })
       .addCase(get_cart_product.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.error;
         console.log(payload);
-      });
+      })
+
+
+     
+
+
   },
 });
 

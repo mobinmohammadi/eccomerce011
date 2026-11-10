@@ -26,7 +26,7 @@ const Home = () => {
   useEffect(() => {
     distpatch(get_category());
     distpatch(get_products());
-    distpatch(get_cart_product());
+    // distpatch(get_cart_product());
     console.log(cart_products);
     
   }, []);

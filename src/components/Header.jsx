@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa";
 import { FaTwitter, FaHeart, FaCartShopping } from "react-icons/fa6";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { get_cart_product } from "../store/Reducers/cartReducer";
 
 const Header = () => {
@@ -29,7 +29,7 @@ const Header = () => {
   const [category, setCategory] = useState(categoryInUrl || "");
   const { categorys } = useSelector((state) => state.home)
   const { userInfo } = useSelector((state) => state.auth)
-  const { cart_product_count ,cart_products } = useSelector((state) => state.cart)
+  const { cart_product_count } = useSelector((state) => state.cart)
 
 
 
@@ -43,9 +43,7 @@ const Header = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() =>{
-    get_cart_product()
-  },[cart_products])
+
 
   const search = (e) => {
     e.preventDefault();
@@ -284,7 +282,7 @@ const Header = () => {
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-bold text-slate-800 dir-ltr tracking-wide">
-                +880 324 234 3243
+                09391177395
               </span>
               <span className="text-[11px] text-slate-500">Support 24/7</span>
             </div>
@@ -355,7 +353,7 @@ const Header = () => {
             <span className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
               <IoMdPhonePortrait className="text-emerald-500" size={14} />
             </span>
-            <span className="text-[13px]">+880 324 234 3243</span>
+            <span className="text-[13px]">09391177395</span>
           </div>
           <div className="flex items-center justify-center gap-2.5 px-2 pt-3">
             {[FaFacebookF, FaTwitter, FaLinkedin, FaGithub].map((Icon, i) => (
