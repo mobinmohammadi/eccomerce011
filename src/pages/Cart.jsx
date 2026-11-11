@@ -14,7 +14,7 @@ const Card = () => {
     cart_products,
     price,
     cart_product_count,
-    shapping_fee,
+    shipping_fee,
     outOfStockProduct,
     buy_product_item,
   } = useSelector((state) => state.cart);
@@ -100,19 +100,19 @@ const Card = () => {
                               <div className="pl-4 sm:pl-0">
                                 <h2 className="text-lg text-orange-500">
                                   ${" "}
-                                  {pt.productInfo.price -
+                                  {(pt.productInfo.price -
                                     Math.floor(
                                       (pt.productInfo.price *
                                         pt.productInfo.discount) /
                                         100,
-                                    )}
+                                    )).toLocaleString()}
                                 </h2>
                                 {pt.productInfo.discount ? (
                                   <>
                                     <p className="line-through">
-                                      {pt.productInfo.discount}
+                                      {pt.productInfo.price}
                                     </p>
-                                    <p>-15%</p>
+                                    <p>-{pt.productInfo.discount}%</p>
                                   </>
                                 ) : null}
                               </div>
@@ -152,7 +152,7 @@ const Card = () => {
                                   />
                                   <div className="pr-4 text-slate-600">
                                     <h2 className="text-md font-semibold">
-                                      Product Name{" "}
+                                      Product Name L {p.products.name}
                                     </h2>
                                     <span className="text-sm">
                                       Brand: {outOfStockProduct.brand}
@@ -199,12 +199,12 @@ const Card = () => {
                     <div className="bg-white p-3 text-slate-600 flex flex-col gap-3">
                       <h2 className="text-xl font-bold">Order Summary</h2>
                       <div className="flex justify-between items-center">
-                        <span>2 Items </span>
-                        <span>$343 </span>
+                        <span>{buy_product_item} Items </span>
+                        <span>${(price).toLocaleString()} </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span>Shipping Fee </span>
-                        <span>$40 </span>
+                        <span>${shipping_fee} </span>
                       </div>
                       <div className="flex gap-2">
                         <input
@@ -219,13 +219,13 @@ const Card = () => {
 
                       <div className="flex justify-between items-center">
                         <span>Total</span>
-                        <span className="text-lg text-[#059473]">$430 </span>
+                        <span className="text-lg text-[#059473]">${(price + shipping_fee).toLocaleString()} </span>
                       </div>
                       <button
                         onClick={redirect}
                         className="px-5 py-[6px] rounded-sm hover:shadow-red-500/50 hover:shadow-lg bg-red-500 text-sm text-white uppercase "
                       >
-                        Process to Checkout
+                        Process to Checkout {buy_product_item}
                       </button>
                     </div>
                   )}

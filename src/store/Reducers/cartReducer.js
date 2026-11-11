@@ -39,7 +39,7 @@ export const cartReducer = createSlice({
     wishlist: [],
     price: 0,
     buy_product_item: '',
-    shapping_fee: 0,
+    shipping_fee: 0,
     outOfStockProduct: [],
     succsussMessage: "",
     errorMessage: "",
@@ -75,7 +75,7 @@ export const cartReducer = createSlice({
         state.cart_products = payload.cart_products;
         state.price = payload.price;
         state.cart_product_count = payload.cart_product_count;
-        state.shapping_fee = payload.shapping_fee;
+        state.shipping_fee = payload.shipping_fee;
         state.outOfStockProduct = payload.outofstock_products;
         state.buy_product_item = payload.buy_product_item;
 
