@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { IoMdPhonePortrait, IoIosArrowDown } from "react-icons/io";
 import {
@@ -14,24 +15,21 @@ import {
 } from "react-icons/fa";
 import { FaTwitter, FaHeart, FaCartShopping } from "react-icons/fa6";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { get_cart_product } from "../store/Reducers/cartReducer";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  const categoryInUrl = searchParams.get("category");
-  const searchValueInUrl = searchParams.get("value");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState(searchValueInUrl || "");
-  const [category, setCategory] = useState(categoryInUrl || "");
-  const { categorys } = useSelector((state) => state.home)
-  const { userInfo } = useSelector((state) => state.auth)
-  const { cart_product_count } = useSelector((state) => state.cart)
+  const [searchValue, setSearchValue] = useState(searchParams.get("value") || "");
+  const [category, setCategory] = useState(searchParams.get("category") || "");
 
-
+  const { categorys = [] } = useSelector((state) => state.home);
+  const { userInfo } = useSelector((state) => state.auth);
+  const { cart_product_count } = useSelector((state) => state.cart);
 
   const navLinks = [
     { to: "/", label: "HOME" },
@@ -41,77 +39,86 @@ const Header = () => {
     { to: "/contact", label: "CONTACT US" },
   ];
 
-  const navigate = useNavigate();
-
-
+  const socialLinks = [FaFacebookF, FaTwitter, FaLinkedin, FaGithub];
 
   const search = (e) => {
     e.preventDefault();
-    navigate(`/products/search?category=${category}&value=${searchValue}`);
+    navigate(
+      `/products/search?category=${encodeURIComponent(category)}&value=${encodeURIComponent(searchValue)}`
+    );
   };
 
   const isActive = (path) => pathname === path;
 
-  return (
-    <header className="sticky top-0 z-[100] w-full bg-white/80 backdrop-blur-xl border-b border-slate-200/60 font-sans shadow-sm">
-      <div className="hidden md:block bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-slate-300">
-        <div className="w-[92%] max-w-[1400px] mx-auto">
-          <div className="flex justify-between items-center h-10 text-xs">
-            <ul className="flex items-center gap-7">
-              <li className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
-                <MdEmail className="text-emerald-400" size={14} />
-                <span className="tracking-wide">support@gmail.com</span>
-              </li>
-              <li className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
-                <IoMdPhonePortrait className="text-emerald-400" size={14} />
-                <span className="tracking-wide">+(123) 3243 343</span>
-              </li>
-            </ul>
+  const closeSidebar = () => setSidebarOpen(false);
 
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-1.5">
-                {[FaFacebookF, FaTwitter, FaLinkedin, FaGithub].map(
-                  (Icon, i) => (
-                    <a
-                      key={i}
-                      href="#"
-                      className="w-7 h-7 flex items-center justify-center rounded-full bg-white/5 text-slate-300 hover:bg-emerald-500 hover:text-white hover:scale-110 transition-all duration-300"
-                    >
-                      <Icon size={11} />
-                    </a>
-                  ),
-                )}
+  return (
+<header className="sticky top-0 z-[100] w-full h-auto bg-white/95 border-b border-slate-100 shadow-[0_4px_25px_rgba(15,23,42,0.04)] font-sans">
+      <div className="hidden md:block bg-slate-950 text-slate-300">
+        <div className="w-[92%] max-w-[1400px] mx-auto">
+          <div className="h-10 flex items-center justify-between text-xs">
+
+            <div className="flex items-center gap-7">
+              <a
+                href="mailto:support@gmail.com"
+                className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
+              >
+                <MdEmail size={15} className="text-emerald-400" />
+                support@gmail.com
+              </a>
+
+              <a
+                href="tel:09391177395"
+                className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
+              >
+                <IoMdPhonePortrait size={15} className="text-emerald-400" />
+                09391177395
+              </a>
+            </div>
+
+            <div className="flex items-center gap-5">
+              <div className="flex items-center gap-2">
+                {socialLinks.map((Icon, i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className="w-7 h-7 flex items-center justify-center rounded-full bg-white/5 text-slate-300 hover:bg-emerald-500 hover:text-white transition-all duration-300"
+                  >
+                    <Icon size={11} />
+                  </a>
+                ))}
               </div>
 
               <span className="w-px h-4 bg-white/10" />
 
-              <div className="relative group cursor-pointer flex items-center gap-1.5 px-2.5 py-1 rounded-md hover:bg-white/5 transition">
+              <div className="relative group flex items-center gap-2 cursor-pointer px-2 py-1 rounded-lg hover:bg-white/5 transition">
                 <img
                   src="/images/language.png"
                   alt="language"
                   className="w-4 h-4"
                 />
-                <span className="text-xs font-medium">EN</span>
+                <span>EN</span>
                 <IoIosArrowDown
                   size={12}
-                  className="group-hover:rotate-180 transition-transform duration-300"
+                  className="group-hover:rotate-180 transition-transform"
                 />
-                <ul className="absolute top-full right-0 mt-2 invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 w-32 bg-white text-slate-700 rounded-xl shadow-2xl border border-slate-100 py-1.5 z-50 overflow-hidden">
-                  <li className="px-3 py-2 text-xs hover:bg-emerald-50 hover:text-emerald-600 cursor-pointer transition">
+
+                <ul className="absolute top-full right-0 mt-2 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 w-32 bg-white text-slate-700 rounded-xl shadow-xl border border-slate-100 py-2 z-50">
+                  <li className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition">
                     English
                   </li>
-                  <li className="px-3 py-2 text-xs hover:bg-emerald-50 hover:text-emerald-600 cursor-pointer transition">
+                  <li className="px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600 transition">
                     فارسی
                   </li>
                 </ul>
               </div>
 
               <Link
-                className="flex items-center gap-2 text-xs font-semibold hover:text-emerald-400 transition-colors"
                 to={userInfo ? userInfo.name : "/login"}
+                className="flex items-center gap-2 font-semibold hover:text-emerald-400 transition-colors"
               >
                 {userInfo ? <FaUser size={12} /> : <FaLock size={12} />}
-                <span>{userInfo?.name || "Login"}</span>
+                {userInfo?.name || "Login"}
               </Link>
             </div>
           </div>
@@ -119,38 +126,42 @@ const Header = () => {
       </div>
 
       <div className="w-[92%] max-w-[1400px] mx-auto">
-        <div className="flex justify-between items-center h-16 lg:h-20 gap-4">
+
+        <div className="h-[72px] lg:h-[82px] flex items-center justify-between gap-5">
+
           <div className="flex items-center justify-between w-full lg:w-auto">
-            <Link to="/" className="flex items-center gap-2 shrink-0 group">
+            <Link to="/" className="shrink-0 group">
               <img
                 src="/images/logo.png"
                 alt="Easy Shop"
-                className="h-8 lg:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-9 lg:h-10 object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </Link>
+
             <button
-              className="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition-all"
               onClick={() => setSidebarOpen(true)}
               aria-label="Open menu"
+              className="lg:hidden w-11 h-11 flex items-center justify-center rounded-xl bg-slate-100 text-slate-700 hover:bg-emerald-500 hover:text-white transition-all"
             >
-              <FaList size={16} />
+              <FaList size={17} />
             </button>
           </div>
 
-          <nav className="hidden lg:flex items-center gap-9 text-[13px] font-semibold tracking-wider">
+          <nav className="hidden lg:flex items-center gap-8 xl:gap-10 text-[13px] font-bold tracking-wide">
             {navLinks.map(({ to, label }) => (
               <Link
                 key={to}
                 to={to}
-                className={`relative py-1 transition-colors duration-200 ${
+                className={`relative py-3 transition-colors duration-300 ${
                   isActive(to)
                     ? "text-emerald-600"
-                    : "text-slate-700 hover:text-emerald-600"
+                    : "text-slate-600 hover:text-emerald-600"
                 }`}
               >
                 {label}
+
                 <span
-                  className={`absolute -bottom-1.5 left-0 h-0.5 bg-emerald-600 rounded-full transition-all duration-300 ${
+                  className={`absolute bottom-1 left-0 h-[2px] rounded-full bg-emerald-500 transition-all duration-300 ${
                     isActive(to) ? "w-full" : "w-0"
                   }`}
                 />
@@ -158,15 +169,16 @@ const Header = () => {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-2.5">
+          <div className="hidden lg:flex items-center gap-3">
+
             <Link
               to="/wishlist"
-              className="relative w-11 h-11 flex items-center justify-center rounded-full bg-slate-50 text-slate-700 hover:bg-emerald-500 hover:text-white hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-105"
               aria-label="Wishlist"
+              className="relative w-11 h-11 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 hover:bg-rose-500 hover:text-white transition-all duration-300 group"
             >
-              <FaHeart size={16} />
+              <FaHeart size={17} />
               {cart_product_count > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-gradient-to-br from-rose-500 to-rose-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow">
+                <span className="absolute -top-1.5 -right-1.5 min-w-[19px] h-[19px] px-1 flex items-center justify-center rounded-full bg-rose-500 text-white text-[10px] font-bold border-2 border-white">
                   {cart_product_count}
                 </span>
               )}
@@ -174,22 +186,23 @@ const Header = () => {
 
             <Link
               to="/cart"
-              className="relative w-11 h-11 flex items-center justify-center rounded-full bg-slate-50 text-slate-700 hover:bg-emerald-500 hover:text-white hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-105"
               aria-label="Cart"
+              className="relative w-11 h-11 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 hover:bg-emerald-500 hover:text-white transition-all duration-300"
             >
-              <FaCartShopping size={16} />
+              <FaCartShopping size={17} />
               {cart_product_count > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-gradient-to-br from-rose-500 to-rose-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow">
+                <span className="absolute -top-1.5 -right-1.5 min-w-[19px] h-[19px] px-1 flex items-center justify-center rounded-full bg-emerald-600 text-white text-[10px] font-bold border-2 border-white">
                   {cart_product_count}
                 </span>
               )}
             </Link>
 
             <Link
-              to={userInfo ?  userInfo.name : "/login"}
-              className="ml-1 px-6 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-[13px] font-semibold hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/40 hover:-translate-y-0.5"
+              to={userInfo ? userInfo.name : "/login"}
+              className="ml-1 px-6 h-11 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-bold transition-all duration-300 shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 hover:-translate-y-0.5"
             >
-              {userInfo ? userInfo.name : "Login"}
+              <FaUser size={13} />
+              {userInfo?.name || "Login"}
             </Link>
           </div>
         </div>
@@ -197,34 +210,39 @@ const Header = () => {
 
       <div className="w-[92%] max-w-[1400px] mx-auto pb-4">
         <div className="flex items-center gap-3 lg:gap-5">
-          <div className="hidden lg:block relative w-[240px] shrink-0">
+
+          <div className="hidden lg:block relative w-[230px] shrink-0">
             <button
               onClick={() => setCategoryOpen((v) => !v)}
-              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white flex justify-between px-5 items-center font-semibold text-sm rounded-xl transition-all hover:from-emerald-700 hover:to-emerald-600 shadow-lg shadow-emerald-600/25"
+              className="w-full h-12 flex items-center justify-between px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-600/20"
             >
-              <div className="flex items-center gap-2.5">
-                <FaList size={14} />
-                <span>All Category</span>
-              </div>
+              <span className="flex items-center gap-3">
+                <FaList size={15} />
+                All Category
+              </span>
+
               <IoIosArrowDown
                 size={16}
-                className={`transition-transform duration-300 ${categoryOpen ? "rotate-180" : ""}`}
+                className={`transition-transform duration-300 ${
+                  categoryOpen ? "rotate-180" : ""
+                }`}
               />
             </button>
 
             <div
-              className={`absolute top-[calc(100%+8px)] left-0 w-full bg-white border border-slate-100 rounded-xl shadow-2xl shadow-slate-300/50 z-50 overflow-hidden transition-all duration-300 origin-top ${
+              className={`absolute top-[calc(100%+10px)] left-0 w-full bg-white rounded-2xl border border-slate-100 shadow-2xl shadow-slate-300/40 z-50 overflow-hidden transition-all duration-300 origin-top ${
                 categoryOpen
-                  ? "max-h-[420px] opacity-100 scale-y-100"
-                  : "max-h-0 opacity-0 scale-y-95"
+                  ? "visible opacity-100 scale-100"
+                  : "invisible opacity-0 scale-95"
               }`}
             >
-              <ul className="py-2 text-slate-600 font-medium max-h-[400px] overflow-y-auto">
+              <ul className="py-2 max-h-[380px] overflow-y-auto">
                 {categorys?.map((c) => (
                   <li key={c._id}>
                     <Link
-                      className="block px-5 py-2.5 text-sm hover:bg-emerald-50 hover:text-emerald-600 transition-colors border-l-2 border-transparent hover:border-emerald-500"
-                      to={`/products?category=${c.name}`}
+                      to={`/products?category=${encodeURIComponent(c.name)}`}
+                      onClick={() => setCategoryOpen(false)}
+                      className="flex items-center px-5 py-3 text-sm text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all border-l-[3px] border-transparent hover:border-emerald-500"
                     >
                       {c.name}
                     </Link>
@@ -234,140 +252,268 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="flex-grow">
-            <form
-              onSubmit={search}
-              className="flex w-full h-12 border border-slate-200 rounded-xl bg-slate-50 overflow-hidden focus-within:border-emerald-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all"
-            >
-              <div className="hidden md:flex items-center gap-1 pl-4 pr-2 border-r border-slate-200">
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="max-w-[150px] text-slate-700 text-sm font-medium bg-transparent outline-none cursor-pointer border-none py-2"
-                >
-                  <option value="">All</option>
-                  {categorys.map((c, i) => (
-                    <option key={i} value={c.name}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-                <IoIosArrowDown
-                  size={12}
-                  className="text-slate-400 pointer-events-none"
-                />
-              </div>
-
-              <input
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                className="flex-grow bg-transparent text-slate-700 outline-none px-4 h-full text-sm placeholder:text-slate-400"
-                type="text"
-                placeholder="Search for products..."
-              />
-
-              <button
-                type="submit"
-                className="bg-emerald-600 hover:bg-emerald-700 transition-colors px-5 md:px-7 h-full font-semibold text-sm text-white flex items-center justify-center gap-2"
+          <form
+            onSubmit={search}
+            className="flex flex-1 h-12 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-emerald-500/10"
+          >
+            <div className="hidden md:flex items-center px-3 border-r border-slate-200">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="max-w-[150px] bg-transparent text-sm text-slate-600 font-medium outline-none cursor-pointer"
               >
-                <FaSearch size={13} />
-                <span className="hidden md:inline">SEARCH</span>
-              </button>
-            </form>
-          </div>
+                <option value="">All Categories</option>
+                {categorys?.map((c) => (
+                  <option key={c._id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <input
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Search for products..."
+              className="flex-1 min-w-0 bg-transparent outline-none px-4 text-sm text-slate-700 placeholder:text-slate-400"
+            />
+
+            <button
+              type="submit"
+              className="flex items-center justify-center gap-2 px-5 md:px-7 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-colors"
+            >
+              <FaSearch size={14} />
+              <span className="hidden sm:inline">SEARCH</span>
+            </button>
+          </form>
 
           <div className="hidden xl:flex items-center gap-3 shrink-0 pl-2">
-            <div className="w-11 h-11 rounded-full flex bg-gradient-to-br from-emerald-50 to-emerald-100 text-emerald-600 justify-center items-center shadow-sm">
-              <FaPhoneAlt size={15} />
+            <div className="w-11 h-11 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+              <FaPhoneAlt size={16} />
             </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-sm font-bold text-slate-800 dir-ltr tracking-wide">
+
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-slate-800 tracking-wide">
                 09391177395
               </span>
-              <span className="text-[11px] text-slate-500">Support 24/7</span>
+              <span className="text-[11px] text-slate-400">
+                Support 24/7
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      <div
-        onClick={() => setSidebarOpen(false)}
-        className={`fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-sm z-[998] lg:hidden transition-opacity duration-300 ${
-          sidebarOpen ? "visible opacity-100" : "invisible opacity-0"
-        }`}
-      />
+      
+<div
+  onClick={closeSidebar}
+  className={`fixed inset-0 z-[998] h-screen bg-slate-950/60 backdrop-blur-sm lg:hidden transition-all duration-500 ${
+    sidebarOpen ? "visible opacity-100" : "invisible opacity-0"
+  }`}
+/>
 
-      <div
-        className={`fixed top-0 z-[999] w-[320px] max-w-[85vw] bg-white h-screen py-6 px-6 overflow-y-auto shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
-          sidebarOpen ? "left-0" : "-left-[320px]"
-        }`}
-      >
-        <div className="flex justify-between items-center mb-8 pb-5 border-b border-slate-100">
+<aside
+  className={`fixed top-0 left-0 z-[999] w-[320px] max-w-[88vw] h-screen bg-white lg:hidden shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+    sidebarOpen ? "translate-x-0" : "-translate-x-full"
+  }`}
+>
+  <div className="h-full flex flex-col overflow-y-auto">
+
+    <div className="relative overflow-hidden bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-500 px-6 pt-7 pb-9">
+      <div className="absolute -top-16 -right-12 w-44 h-44 rounded-full bg-white/10" />
+      <div className="absolute -bottom-16 -left-10 w-36 h-36 rounded-full bg-white/10" />
+
+      <div className="relative flex items-center justify-between">
+        <Link to="/" onClick={closeSidebar}>
           <img
             src="/images/logo.png"
             alt="Easy Shop"
-            className="h-8 object-contain"
+            className="h-9 object-contain brightness-0 invert"
           />
-          <button
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Close menu"
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 transition"
-          >
-            <FaTimes size={14} />
-          </button>
+        </Link>
+
+        <button
+          onClick={closeSidebar}
+          className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/15 text-white hover:bg-white/25 transition"
+          aria-label="Close menu"
+        >
+          <FaTimes size={17} />
+        </button>
+      </div>
+
+      <div className="relative mt-8 flex items-center gap-3">
+        <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center text-white shadow-lg">
+          <FaUser size={23} />
         </div>
 
-        <ul className="flex flex-col gap-1 font-semibold text-slate-700">
-          {navLinks.map(({ to, label }) => (
-            <li key={to}>
-              <Link
-                className={`block px-4 py-3 rounded-xl transition-all ${
-                  isActive(to)
-                    ? "bg-gradient-to-r from-emerald-50 to-emerald-100/50 text-emerald-600 border-l-2 border-emerald-500"
-                    : "hover:bg-slate-50"
-                }`}
-                to={to}
-                onClick={() => setSidebarOpen(false)}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="flex-1 min-w-0">
+          <p className="text-white/70 text-xs mb-1">
+            Welcome to Easy Shop
+          </p>
+          <p className="text-white font-bold text-base truncate">
+            {userInfo?.name || "Hello, Guest!"}
+          </p>
+          <p className="text-emerald-50 text-[11px] mt-1">
+            {userInfo ? "Your account" : "Sign in to your account"}
+          </p>
+        </div>
+      </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-4 text-sm">
+      <Link
+        to={userInfo ? userInfo.name : "/login"}
+        onClick={closeSidebar}
+        className="relative mt-6 w-full h-11 rounded-xl bg-white text-emerald-700 flex items-center justify-center gap-2 text-sm font-bold shadow-lg hover:bg-emerald-50 transition"
+      >
+        <FaUser size={13} />
+        {userInfo ? "My Account" : "Login / Register"}
+      </Link>
+    </div>
+
+    <div className="px-5 pt-6">
+      <p className="px-3 mb-3 text-[11px] font-bold text-slate-400 tracking-widest">
+        MAIN MENU
+      </p>
+
+      <nav className="flex flex-col gap-1.5">
+        {[
+          { to: "/", label: "Home", icon: "⌂" },
+          { to: "/shops", label: "Shop", icon: "▣" },
+          { to: "/blog", label: "Blog", icon: "▤" },
+          { to: "/about", label: "About Us", icon: "◉" },
+          { to: "/contact", label: "Contact Us", icon: "✉" },
+        ].map(({ to, label, icon }) => (
           <Link
-            to={userInfo ? "/dashboard" : "/login"}
-            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-lg shadow-emerald-600/25"
-            onClick={() => setSidebarOpen(false)}
+            key={to}
+            to={to}
+            onClick={closeSidebar}
+            className={`group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 ${
+              isActive(to)
+                ? "bg-emerald-50 text-emerald-700 shadow-sm"
+                : "text-slate-600 hover:bg-slate-50 hover:text-emerald-600"
+            }`}
           >
-            <FaUser size={13} /> {userInfo?.name || "Login"}
+            <span
+              className={`w-9 h-9 rounded-lg flex items-center justify-center text-xl transition-all ${
+                isActive(to)
+                  ? "bg-emerald-600 text-white"
+                  : "bg-slate-100 text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-600"
+              }`}
+            >
+              {icon}
+            </span>
+
+            <span className="flex-1 text-sm font-semibold">{label}</span>
+
+            <IoIosArrowDown
+              className="-rotate-90 text-slate-300 group-hover:text-emerald-500"
+              size={15}
+            />
           </Link>
-          <div className="flex items-center gap-3 text-slate-600 px-2 py-1">
-            <span className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
-              <MdEmail className="text-emerald-500" size={14} />
+        ))}
+      </nav>
+    </div>
+
+    <div className="px-5 mt-7">
+      <p className="px-3 mb-3 text-[11px] font-bold text-slate-400 tracking-widest">
+        QUICK ACCESS
+      </p>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Link
+          to="/wishlist"
+          onClick={closeSidebar}
+          className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 transition"
+        >
+          <FaHeart size={20} />
+          <span className="text-xs font-bold">Wishlist</span>
+        </Link>
+
+        <Link
+          to="/cart"
+          onClick={closeSidebar}
+          className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition"
+        >
+          <FaCartShopping size={20} />
+          <span className="text-xs font-bold">My Cart</span>
+          {cart_product_count > 0 && (
+            <span className="text-[10px] font-bold">
+              {cart_product_count} items
             </span>
-            <span className="text-[13px]">support@gmail.com</span>
+          )}
+        </Link>
+      </div>
+    </div>
+
+    <div className="px-5 mt-7">
+      <p className="px-3 mb-3 text-[11px] font-bold text-slate-400 tracking-widest">
+        CATEGORIES
+      </p>
+
+      <div className="rounded-2xl bg-slate-50 p-2">
+        {categorys?.slice(0, 5).map((c) => (
+          <Link
+            key={c._id}
+            to={`/products?category=${encodeURIComponent(c.name)}`}
+            onClick={closeSidebar}
+            className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-white hover:text-emerald-600 transition"
+          >
+            <span>{c.name}</span>
+            <IoIosArrowDown className="-rotate-90 text-slate-300" size={13} />
+          </Link>
+        ))}
+
+        <Link
+          to="/shops"
+          onClick={closeSidebar}
+          className="block px-3 py-2.5 text-xs font-bold text-emerald-600 hover:text-emerald-700"
+        >
+          View All Categories
+        </Link>
+      </div>
+    </div>
+
+    <div className="mt-auto px-5 pt-7 pb-6">
+      <div className="rounded-2xl bg-slate-950 p-4 text-white">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <FaPhoneAlt size={16} />
           </div>
-          <div className="flex items-center gap-3 text-slate-600 px-2 py-1">
-            <span className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
-              <IoMdPhonePortrait className="text-emerald-500" size={14} />
-            </span>
-            <span className="text-[13px]">09391177395</span>
+
+          <div>
+            <p className="text-xs text-slate-400">Need help?</p>
+            <a
+              href="tel:09391177395"
+              className="text-sm font-bold tracking-wide"
+            >
+              09391177395
+            </a>
           </div>
-          <div className="flex items-center justify-center gap-2.5 px-2 pt-3">
+        </div>
+
+        <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+          <span className="text-[11px] text-slate-400">
+            Support available 24/7
+          </span>
+
+          <div className="flex gap-2">
             {[FaFacebookF, FaTwitter, FaLinkedin, FaGithub].map((Icon, i) => (
               <a
                 key={i}
                 href="#"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-emerald-500 hover:text-white hover:scale-110 transition-all duration-300"
+                className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-slate-300 hover:bg-emerald-500 hover:text-white transition"
               >
-                <Icon size={14} />
+                <Icon size={11} />
               </a>
             ))}
           </div>
         </div>
       </div>
+    </div>
+
+  </div>
+</aside>
+
     </header>
   );
 };

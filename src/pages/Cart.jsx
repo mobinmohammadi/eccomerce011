@@ -4,7 +4,13 @@ import { Link, useNavigate } from "react-router";
 import { IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { delete_cart_product, get_cart_product, messageClear } from "../store/Reducers/cartReducer";
+import {
+  delete_cart_product,
+  get_cart_product,
+  messageClear,
+  inccrement_product,
+  deccrement_product_quantity,
+} from "../store/Reducers/cartReducer";
 import toast from "react-hot-toast";
 
 const Card = () => {
@@ -22,14 +28,15 @@ const Card = () => {
     buy_product_item,
   } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(get_cart_product(userInfo?.id));
   }, []);
+
   useEffect(() => {
     if (succsussMessage) {
       toast.success(succsussMessage);
       dispatch(get_cart_product(userInfo.id));
-
       dispatch(messageClear());
     }
   }, [succsussMessage]);
@@ -40,7 +47,9 @@ const Card = () => {
       dispatch(messageClear());
     }
   }, [errorMessage]);
+
   const card_products = [1, 2];
+
   const redirect = () => {
     navigate("/shipping", {
       state: {
@@ -52,220 +61,243 @@ const Card = () => {
     });
   };
 
-  
+  const inc = (quantity, stock, cartId) => {
+    const temp = quantity + 1;
+    if (temp <= stock) {
+      dispatch(inccrement_product(cartId));
+    }
+  };
+
+  const dec = (quantity, stock, cartId) => {
+    const temp = quantity - 1;
+    if (temp > 0) {
+      dispatch(deccrement_product_quantity(cartId));
+    }
+  };
 
   return (
-    <div>
-      <Header />
-      <section className='bg-[url("/images/banner/shop.png")] h-55 mt-6 bg-cover bg-no-repeat relative bg-left'>
-        <div className="absolute left-0 top-0 w-full h-full bg-[#2422228a]">
-          <div className="w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto">
-            <div className="flex flex-col justify-center gap-1 items-center h-full w-full text-white">
-              <h2 className="text-3xl font-bold">Card Page </h2>
-              <div className="flex justify-center items-center gap-2 text-2xl w-full">
-                <Link to="/">Home</Link>
-                <span className="pt-1">
-                  <IoIosArrowForward />
-                </span>
-                <span>Card </span>
-              </div>
-            </div>
-          </div>
+    
+<div>
+  <Header />
+
+  <section className='bg-[url("/images/banner/shop.png")] h-64 mt-6 bg-cover bg-center relative'>
+    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-emerald-950/50">
+      <div className="w-[90%] h-full mx-auto flex flex-col justify-center items-center text-white gap-3">
+        <h2 className="text-4xl font-extrabold tracking-tight">Shopping Cart</h2>
+        <div className="flex items-center gap-3 text-sm text-slate-200">
+          <Link to="/" className="hover:text-emerald-400 transition">Home</Link>
+          <IoIosArrowForward />
+          <span className="text-emerald-400 font-semibold">Cart</span>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section className="bg-[#eeeeee]">
-        <div className="w-[85%] lg:w-[90%] md:w-[90%] sm:w-[90%] mx-auto py-16">
-          {cart_products.length > 0 || outOfStockProduct > 0 ? (
-            <div className="flex flex-col sm:flex-row sm:flex-wrap">
-              <div className="w-full  md:w-[67%]">
-                <div className="pr-3 md-lg:pr-0">
-                  <div className="flex flex-col gap-3">
-                    <div className="bg-white p-4">
-                      <h2 className="text-md text-green-500 font-semibold">
-                        Stock Products {cart_products.length}
-                      </h2>
+  <section className="bg-[#f8fafc]">
+    <div className="w-[90%] mx-auto py-12 md:py-16">
+      {cart_products.length > 0 || outOfStockProduct?.length > 0 ? (
+        <div className="flex flex-col md:flex-row gap-6">
+
+          <div className="w-full md:w-[67%]">
+            <div className="flex flex-col gap-5">
+
+              {cart_products.length > 0 && (
+                <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg font-bold text-slate-800">Available Products</h2>
+                    <p className="text-sm text-slate-400 mt-1">Products ready for checkout</p>
+                  </div>
+                  <span className="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl text-sm font-bold">
+                    {cart_products.length} Items
+                  </span>
+                </div>
+              )}
+
+              {cart_products?.map((p, i) => (
+                <div key={p._id ?? p.shopName ?? i} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-shadow duration-300">
+
+                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg">
+                      🏪
                     </div>
+                    <h2 className="font-bold text-slate-800">{p.shopName}</h2>
+                  </div>
 
-                    {cart_products?.map((p, i) => (
-                      <div className="flex bg-white p-4 flex-col md:flex-col gap-8">
-                        <div className="flex justify-start items-center">
-                          <h2 className="text-md text-slate-600 font-bold">
-                            {p.shopName}
+                  {p?.products.map((pt, j) => (
+                    <div key={pt._id ?? j} className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-5 border-b last:border-0 border-slate-100">
+
+                      <div className="flex items-center gap-4 min-w-0">
+                        <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
+                          <img className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" src={pt?.productInfo.images[0]} alt={pt?.productInfo.name} />
+                        </div>
+                        <div className="min-w-0">
+                          <h2 className="font-bold text-slate-800 line-clamp-2">{pt.productInfo.name}</h2>
+                          <p className="text-sm text-slate-400 mt-2">
+                            Brand: <span className="text-slate-600 font-medium">{pt?.productInfo.brand}</span>
+                          </p>
+                          <div className="mt-2">
+                            <span className="text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full font-medium">In Stock</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between sm:justify-end gap-5">
+                        <div>
+                          <h2 className="text-xl font-extrabold text-emerald-600">
+                            ${(
+                              pt.productInfo.price -
+                              Math.floor((pt.productInfo.price * pt.productInfo.discount) / 100)
+                            ).toLocaleString()}
                           </h2>
+                          {pt.productInfo.discount ? (
+                            <div className="flex items-center gap-2 mt-1">
+                              <p className="line-through text-xs text-slate-400">
+                                ${pt.productInfo.price.toLocaleString()}
+                              </p>
+                              <span className="text-xs text-red-500 font-bold">-{pt.productInfo.discount}%</span>
+                            </div>
+                          ) : null}
                         </div>
 
-                        {p?.products.map((pt, i) => (
-                          <div className="w-full flex flex-col gap-5 md:flex-row md:flex-wrap">
-                            <div className="flex sm:w-full gap-2 md:w-5/12 transition-all duration-1000">
-                              <div className="flex gap-2 justify-start items-center">
-                                <img
-                                  className="w-[80px] h-[80px]"
-                                  src={pt?.productInfo.images[0]}
-                                  alt=""
-                                />
-                                <div className="pr-4 text-slate-600">
-                                  <h2 className="text-md font-semibold">
-                                    Product Name : {pt.productInfo.name}
-                                  </h2>
-                                  <span className="text-sm">
-                                    Brand: {pt?.productInfo.brand}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center bg-slate-50 border border-slate-200 rounded-lg h-9">
+                            <button type="button" onClick={() => dec(pt.quantity, pt.productInfo.stock, pt._id)} className="px-3 h-full text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-l-lg transition">−</button>
+                            <span className="px-2 text-sm font-bold text-slate-700">{pt.quantity}</span>
+                            <button type="button" onClick={() => inc(pt.quantity, pt.productInfo.stock, pt._id)} className="px-3 h-full text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-r-lg transition">+</button>
+                          </div>
 
-                            <div className="flex justify-between w-12/12 md:w-5/12 sm:w-full sm:mt-3">
-                              <div className="pl-4 sm:pl-0">
-                                <h2 className="text-lg text-orange-500">
-                                  ${" "}
-                                  {(
-                                    pt.productInfo.price -
-                                    Math.floor(
-                                      (pt.productInfo.price *
-                                        pt.productInfo.discount) /
-                                        100,
-                                    )
-                                  ).toLocaleString()}
-                                </h2>
-                                {pt.productInfo.discount ? (
-                                  <>
-                                    <p className="line-through">
-                                      {pt.productInfo.price}
-                                    </p>
-                                    <p>-{pt.productInfo.discount}%</p>
-                                  </>
-                                ) : null}
-                              </div>
-                              <div className="flex gap-2 flex-col">
-                                <div className="flex bg-slate-200 h-[30px] justify-center items-center text-xl">
-                                  <div className="px-3 cursor-pointer">-</div>
-                                  <div className="px-3">{pt.quantity}</div>
-                                  <div className="px-3 cursor-pointer">+</div>
-                                </div>
-                                <button onClick={() => dispatch(delete_cart_product(pt._id))} className="px-5 py-[3px] bg-red-500 text-white">
-                                  Delete
-                                </button>
-                              </div>
+                          <button onClick={() => dispatch(delete_cart_product(pt._id))} className="flex items-center justify-center gap-1.5 text-xs text-red-500 hover:bg-red-50 rounded-lg py-1.5 transition">
+                            <span>✕</span> Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              {outOfStockProduct?.length > 0 && (
+                <div className="flex flex-col gap-4">
+                  <div className="bg-white p-5 rounded-2xl border border-red-100 shadow-sm flex justify-between items-center">
+                    <div>
+                      <h2 className="text-lg font-bold text-slate-800">Out of Stock</h2>
+                      <p className="text-sm text-slate-400 mt-1">These products are currently unavailable</p>
+                    </div>
+                    <span className="bg-red-50 text-red-500 px-4 py-2 rounded-xl text-sm font-bold">
+                      {outOfStockProduct.length} Items
+                    </span>
+                  </div>
+
+                  <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm divide-y divide-slate-100">
+                    {outOfStockProduct.map((p) =>
+                      p.products.map((ou) => (
+                        <div key={ou.id ?? ou._id ?? ou.name} className="flex flex-col sm:flex-row justify-between items-center gap-5 py-5 first:pt-0 last:pb-0">
+                          <div className="flex items-center gap-4 w-full">
+                            <img className="w-24 h-24 rounded-xl object-cover border border-slate-100 opacity-60" src={ou.images?.[0]} alt={ou.name} />
+                            <div>
+                              <h2 className="font-bold text-slate-700">{ou.name}</h2>
+                              <p className="text-sm text-slate-400 mt-2">Brand: {ou.brand}</p>
+                              <span className="inline-block mt-2 text-xs text-red-500 bg-red-50 px-3 py-1 rounded-full">Out of Stock</span>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    ))}
-
-                    {outOfStockProduct?.length > 0 && (
-                      <div className="flex flex-col gap-3">
-                        <div className="bg-white p-4">
-                          <h2 className="text-md text-red-500 font-semibold">
-                            Out of Stock {outOfStockProduct?.length}
-                          </h2>
-                        </div>
-
-                        <div className="bg-white p-4">
-                          {outOfStockProduct.map((p, i) => (
-                            <div key={i} className="w-full flex flex-wrap">
-                              <div className="flex sm:w-full gap-2 w-7/12">
-                                <div className="flex gap-2 justify-start items-center">
-                                  <img
-                                    className="w-[80px] h-[80px]"
-                                    src={p.products[0].images[0]}
-                                    alt=""
-                                  />
-                                  <div className="pr-4 text-slate-600">
-                                    <h2 className="text-md font-semibold">
-                                      Product Name L {p.products.name}
-                                    </h2>
-                                    <span className="text-sm">
-                                      Brand: {outOfStockProduct.brand}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="flex justify-between w-5/12 sm:w-full sm:mt-3">
-                                <div className="pl-4 sm:pl-0">
-                                  <h2 className="text-lg text-orange-500">
-                                    ${" "}
-                                    {p.price -
-                                      Math.floor((p.price * p.discount) / 100)}
-                                  </h2>
-                                  <p className="line-through">$ {p.price}</p>
-                                  <p>-{p.discount}%</p>
-                                </div>
-                                <div className="flex gap-2 flex-col">
-                                  <div className="flex bg-slate-200 h-[30px] justify-center items-center text-xl">
-                                    <div className="px-3 cursor-pointer">-</div>
-                                    <div className="px-3">2</div>
-                                    <div className="px-3 cursor-pointer">+</div>
-                                  </div>
-                                  <button className="px-5 py-[3px] bg-red-500 text-white">
-                                    Delete
-                                  </button>
-                                </div>
-                              </div>
+                          <div className="flex items-center justify-between sm:justify-end gap-5 w-full sm:w-auto">
+                            <div>
+                              <h2 className="text-lg font-bold text-slate-500">
+                                ${(
+                                  ou.price - Math.floor((ou.price * ou.discount) / 100)
+                                ).toLocaleString()}
+                              </h2>
+                              <p className="line-through text-xs text-slate-400">${ou.price.toLocaleString()}</p>
+                              <span className="text-xs text-red-500">-{ou.discount}%</span>
                             </div>
-                          ))}
+                            <div className="flex flex-col gap-2">
+                              <div className="flex items-center bg-slate-100 rounded-lg h-9 opacity-50">
+                                <button disabled className="px-3">−</button>
+                                <span className="px-2 text-sm">{ou.quantity || 0}</span>
+                                <button disabled className="px-3">+</button>
+                              </div>
+                              <button type="button" className="text-xs text-red-500 hover:bg-red-50 rounded-lg py-1.5 transition">Remove</button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )),
                     )}
                   </div>
                 </div>
-              </div>
+              )}
+            </div>
+          </div>
 
-              <div className="w-full pr-3 md:pl-5 sm:pr-0 mt-5 sm:mt-0  md:w-[33%]">
-                <div className="md:pl-3 md-lg:pl-0 ">
-                  {card_products.length > 0 && (
-                    <div className="bg-white p-3 text-slate-600 flex flex-col gap-3">
-                      <h2 className="text-xl font-bold">Order Summary</h2>
-                      <div className="flex justify-between items-center">
-                        <span>{buy_product_item} Items </span>
-                        <span>${price.toLocaleString()} </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span>Shipping Fee </span>
-                        <span>${shipping_fee} </span>
-                      </div>
-                      <div className="flex gap-2">
-                        <input
-                          className="w-full px-3 py-2 border border-slate-200 outline-0 focus:border-green-500 rounded-sm"
-                          type="text"
-                          placeholder="Input Vauchar Coupon"
-                        />
-                        <button className="px-5 py-[1px] bg-[#059473] text-white rounded-sm uppercase text-sm">
-                          Apply
-                        </button>
-                      </div>
+          <div className="w-full md:w-[33%]">
+            <div className="md:sticky md:top-6">
+              {card_products.length > 0 && (
+                <div className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-lg shadow-slate-200/50">
+                  <div className="bg-gradient-to-br from-slate-900 to-emerald-900 p-6 text-white">
+                    <p className="text-emerald-300 text-xs font-semibold uppercase tracking-widest">Your Shopping Cart</p>
+                    <h2 className="text-2xl font-extrabold mt-2">Order Summary</h2>
+                    <p className="text-sm text-slate-300 mt-3">{buy_product_item} Products in your cart</p>
+                  </div>
 
-                      <div className="flex justify-between items-center">
-                        <span>Total</span>
-                        <span className="text-lg text-[#059473]">
-                          ${(price + shipping_fee).toLocaleString()}{" "}
-                        </span>
-                      </div>
-                      <button
-                        onClick={redirect}
-                        className="px-5 py-[6px] rounded-sm hover:shadow-red-500/50 hover:shadow-lg bg-red-500 text-sm text-white uppercase "
-                      >
-                        Process to Checkout {buy_product_item}
-                      </button>
+                  <div className="p-5 flex flex-col gap-5">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-500">Subtotal</span>
+                      <span className="font-bold text-slate-800">${price.toLocaleString()}</span>
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <Link className="px-4 py-1 bg-indigo-500 text-white" to="/shops">
-                {" "}
-                Shop Now
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
 
-      <Footer />
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-500">Shipping Fee</span>
+                      <span className="font-bold text-slate-800">${shipping_fee.toLocaleString()}</span>
+                    </div>
+
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                      <p className="text-sm font-bold text-slate-700 mb-3">Have a coupon?</p>
+                      <div className="flex gap-2">
+                        <input type="text" placeholder="Enter coupon code" className="w-full min-w-0 bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-emerald-500 transition" />
+                        <button className="bg-slate-900 hover:bg-emerald-700 text-white rounded-lg px-4 text-sm font-bold transition">Apply</button>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-dashed border-slate-200 pt-5">
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-slate-800">Total</span>
+                        <span className="text-2xl font-extrabold text-emerald-600">${(price + shipping_fee).toLocaleString()}</span>
+                      </div>
+                    </div>
+
+                    <button onClick={redirect} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl py-4 px-5 flex items-center justify-between transition-all duration-300 shadow-lg shadow-emerald-600/20 font-bold">
+                      <span className="text-sm uppercase">Proceed to Checkout</span>
+                      <span className="flex items-center gap-2">
+                        <span className="bg-white/20 rounded-lg px-2 py-1 text-xs">{buy_product_item}</span>
+                        <span className="text-xl">→</span>
+                      </span>
+                    </button>
+
+                    <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
+                      <span className="text-emerald-500">🔒</span>
+                      Secure and encrypted checkout
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm py-20 flex flex-col items-center text-center">
+          <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-4xl mb-5">🛒</div>
+          <h2 className="text-2xl font-bold text-slate-800">Your Cart is Empty</h2>
+          <p className="text-slate-400 text-sm mt-2 mb-6">Looks like you haven't added anything yet.</p>
+          <Link className="px-7 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition" to="/shops">
+            Start Shopping
+          </Link>
+        </div>
+      )}
     </div>
+  </section>
+
+  <Footer />
+</div>
+
   );
 };
 

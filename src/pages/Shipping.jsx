@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -32,127 +33,71 @@ const Shipping = () => {
   };
 
   return (
-    <div>
+    <div className="bg-slate-50 min-h-screen">
       <Header />
 
-      {/* ===== Banner ===== */}
-      <section className='bg-[url("/images/banner/shop.png")] h-[160px] sm:h-[200px] md:h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
-        <div className='absolute left-0 top-0 w-full h-full bg-[#2422228a]'>
-          <div className='w-[90%] sm:w-[90%] md:w-[90%] lg:w-[85%] h-full mx-auto'>
-            <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
-              <h2 className='text-2xl sm:text-3xl font-bold'>Shipping Page</h2>
-              <div className='flex justify-center items-center gap-2 text-lg sm:text-xl md:text-2xl w-full'>
-                <Link to='/'>Home</Link>
-                <span className='pt-1'><IoIosArrowForward /></span>
-                <span>Shipping</span>
-              </div>
+      <section className='bg-[url("/images/banner/shop.png")] h-64 mt-6 bg-cover bg-center relative'>
+        <div className='absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-emerald-950/50'>
+          <div className='w-[90%] h-full mx-auto flex flex-col justify-center items-center text-white gap-3'>
+            <h2 className='text-4xl font-extrabold tracking-tight'>Shipping Details</h2>
+            <div className='flex items-center gap-3 text-sm text-slate-200'>
+              <Link to='/' className='hover:text-emerald-400 transition'>Home</Link>
+              <IoIosArrowForward />
+              <span className='text-emerald-400 font-semibold'>Shipping</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===== Main ===== */}
-      <section className='bg-[#eeeeee]'>
-        <div className='w-[92%] sm:w-[90%] md:w-[90%] lg:w-[85%] mx-auto py-8 sm:py-12 md:py-16'>
-          <div className='w-full flex flex-wrap gap-y-5'>
+      <section className='bg-slate-50'>
+        <div className='w-[92%] sm:w-[90%] lg:w-[85%] mx-auto py-10 md:py-16'>
+          <div className='flex flex-col lg:flex-row gap-6'>
 
-            {/* ---- ستون چپ (فرم و محصولات) ---- */}
-            <div className='w-full lg:w-[67%] lg:pr-3'>
-              <div className='flex flex-col gap-3'>
+            <div className='w-full lg:w-[67%]'>
+              <div className='flex flex-col gap-5'>
 
-                {/* ---- فرم آدرس ---- */}
-                <div className='bg-white p-4 sm:p-6 shadow-sm rounded-md'>
-                  <h2 className='text-slate-600 font-bold pb-3'>Shipping Information</h2>
+                <div className='bg-white p-5 sm:p-7 rounded-2xl border border-slate-100 shadow-sm'>
+                  <div className='flex items-center gap-4 mb-7 border-b border-slate-100 pb-5'>
+                    <div className='w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl'>
+                      📍
+                    </div>
+                    <div>
+                      <h2 className='text-xl font-extrabold text-slate-800'>Shipping Information</h2>
+                      <p className='text-sm text-slate-400 mt-1'>Enter your delivery details</p>
+                    </div>
+                  </div>
 
                   {!res && (
                     <form onSubmit={save}>
-                      {/* ردیف 1: Name + Address */}
-                      <div className='flex flex-col sm:flex-row gap-3 sm:gap-5 w-full text-slate-600'>
-                        <div className='flex flex-col gap-1 mb-2 w-full'>
-                          <label htmlFor="name">Name</label>
-                          <input
-                            onChange={inputHandle}
-                            value={state.name}
-                            type="text"
-                            className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md'
-                            name="name" id="name" placeholder='Name'
-                          />
-                        </div>
-                        <div className='flex flex-col gap-1 mb-2 w-full'>
-                          <label htmlFor="address">Address</label>
-                          <input
-                            onChange={inputHandle}
-                            value={state.address}
-                            type="text"
-                            className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md'
-                            name="address" id="address" placeholder='Address'
-                          />
-                        </div>
-                      </div>
+                      <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 text-slate-600'>
+                        {[
+                          { name: 'name', label: 'Full Name', placeholder: 'Enter your full name' },
+                          { name: 'address', label: 'Street Address', placeholder: 'Enter your address' },
+                          { name: 'phone', label: 'Phone Number', placeholder: 'Enter your phone number' },
+                          { name: 'post', label: 'Postal Code', placeholder: 'Enter postal code' },
+                          { name: 'province', label: 'Province', placeholder: 'Enter province' },
+                          { name: 'city', label: 'City', placeholder: 'Enter city' },
+                          { name: 'area', label: 'Area', placeholder: 'Enter your area' }
+                        ].map((field) => (
+                          <div key={field.name} className='flex flex-col gap-2'>
+                            <label htmlFor={field.name} className='text-sm font-semibold text-slate-700'>
+                              {field.label}
+                            </label>
+                            <input
+                              onChange={inputHandle}
+                              value={state[field.name]}
+                              type="text"
+                              name={field.name}
+                              id={field.name}
+                              placeholder={field.placeholder}
+                              className='w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm text-slate-700 placeholder:text-slate-400 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all'
+                            />
+                          </div>
+                        ))}
 
-                      {/* ردیف 2: Phone + Post */}
-                      <div className='flex flex-col sm:flex-row gap-3 sm:gap-5 w-full text-slate-600'>
-                        <div className='flex flex-col gap-1 mb-2 w-full'>
-                          <label htmlFor="phone">Phone</label>
-                          <input
-                            onChange={inputHandle}
-                            value={state.phone}
-                            type="text"
-                            className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md'
-                            name="phone" id="phone" placeholder='Phone'
-                          />
-                        </div>
-                        <div className='flex flex-col gap-1 mb-2 w-full'>
-                          <label htmlFor="post">Post</label>
-                          <input
-                            onChange={inputHandle}
-                            value={state.post}
-                            type="text"
-                            className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md'
-                            name="post" id="post" placeholder='Post'
-                          />
-                        </div>
-                      </div>
-
-                      {/* ردیف 3: Province + City */}
-                      <div className='flex flex-col sm:flex-row gap-3 sm:gap-5 w-full text-slate-600'>
-                        <div className='flex flex-col gap-1 mb-2 w-full'>
-                          <label htmlFor="province">Province</label>
-                          <input
-                            onChange={inputHandle}
-                            value={state.province}
-                            type="text"
-                            className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md'
-                            name="province" id="province" placeholder='Province'
-                          />
-                        </div>
-                        <div className='flex flex-col gap-1 mb-2 w-full'>
-                          <label htmlFor="city">City</label>
-                          <input
-                            onChange={inputHandle}
-                            value={state.city}
-                            type="text"
-                            className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md'
-                            name="city" id="city" placeholder='City'
-                          />
-                        </div>
-                      </div>
-
-                      {/* ردیف 4: Area + دکمه */}
-                      <div className='flex flex-col sm:flex-row gap-3 sm:gap-5 w-full text-slate-600'>
-                        <div className='flex flex-col gap-1 mb-2 w-full'>
-                          <label htmlFor="area">Area</label>
-                          <input
-                            onChange={inputHandle}
-                            value={state.area}
-                            type="text"
-                            className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md'
-                            name="area" id="area" placeholder='Area'
-                          />
-                        </div>
-                        <div className='flex flex-col gap-1 sm:mt-7 mb-2 w-full'>
-                          <button className='px-3 py-[6px] rounded-sm hover:shadow-green-500/50 hover:shadow-lg bg-green-500 text-white'>
-                            Save Change
+                        <div className='flex flex-col justify-end'>
+                          <button className='w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 transition-all duration-300 hover:-translate-y-0.5'>
+                            Save Shipping Address
                           </button>
                         </div>
                       </div>
@@ -160,70 +105,71 @@ const Shipping = () => {
                   )}
 
                   {res && (
-                    <div className='flex flex-col gap-1'>
-                      <h2 className='text-slate-600 font-semibold pb-2'>
-                        Deliver To {state.name}
-                      </h2>
-                      <p className='break-words'>
-                        <span className='bg-blue-200 text-blue-800 text-sm font-medium mr-2 px-2 py-1 rounded'>
-                          Home
-                        </span>
-                        <span>
-                          {state.phone} {state.address} {state.province} {state.city} {state.area}
-                        </span>
-                        <span
-                          onClick={() => setRes(false)}
-                          className='text-indigo-500 cursor-pointer ml-2'
-                        >
-                          Change
-                        </span>
-                      </p>
-                      <p className='text-slate-600 text-sm'>Email To ariyan@gmail.com</p>
+                    <div className='bg-emerald-50/70 border border-emerald-100 rounded-2xl p-5'>
+                      <div className='flex justify-between items-center mb-4'>
+                        <div>
+                          <p className='text-xs text-emerald-600 font-bold uppercase tracking-wider'>Delivery Address</p>
+                          <h2 className='text-lg font-bold text-slate-800 mt-1'>Deliver To {state.name}</h2>
+                        </div>
+                        <span className='bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold'>Home</span>
+                      </div>
+
+                      <div className='space-y-2 text-sm text-slate-600'>
+                        <p>📞 {state.phone}</p>
+                        <p>📍 {state.address}, {state.area}, {state.city}, {state.province}</p>
+                        <p>📮 {state.post}</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setRes(false)}
+                        className='mt-5 text-sm font-bold text-emerald-700 hover:text-emerald-900 transition'
+                      >
+                        Edit Address
+                      </button>
                     </div>
                   )}
                 </div>
 
-                {/* ---- کارت‌های محصول ---- */}
                 {[1, 2].map((_, i) => (
-                  <div key={i} className='flex bg-white p-4 flex-col gap-2 rounded-md'>
-                    <div className='flex justify-start items-center'>
-                      <h2 className='text-md text-slate-600 font-bold'>Easy Shop</h2>
+                  <div key={i} className='bg-white p-5 rounded-2xl border border-slate-100 shadow-sm'>
+                    <div className='flex items-center gap-3 border-b border-slate-100 pb-4 mb-4'>
+                      <div className='w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center'>🏪</div>
+                      <div>
+                        <h2 className='font-bold text-slate-800'>Easy Shop</h2>
+                        <p className='text-xs text-slate-400 mt-1'>Order products</p>
+                      </div>
                     </div>
 
                     {[1, 2].map((_, j) => (
-                      <div key={j} className='w-full flex flex-col sm:flex-row gap-2'>
-                        {/* تصویر + نام */}
-                        <div className='flex w-full sm:w-7/12 gap-2'>
-                          <div className='flex gap-2 justify-start items-center'>
+                      <div key={j} className='flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-b last:border-0 border-slate-100'>
+                        <div className='flex items-center gap-4'>
+                          <div className='w-20 h-20 rounded-xl bg-slate-50 border border-slate-100 overflow-hidden'>
                             <img
-                              className='w-[64px] h-[64px] sm:w-[80px] sm:h-[80px] object-cover'
+                              className='w-full h-full object-cover hover:scale-110 transition-transform duration-500'
                               src={`/images/products/${j + 1}.webp`}
-                              alt=""
+                              alt="Product"
                             />
-                            <div className='pr-4 text-slate-600'>
-                              <h2 className='text-md font-semibold'>Product Name</h2>
-                              <span className='text-sm'>Brand: Jara</span>
-                            </div>
+                          </div>
+                          <div>
+                            <h2 className='font-bold text-slate-800'>Product Name</h2>
+                            <p className='text-sm text-slate-400 mt-1'>Brand: Jara</p>
+                            <span className='inline-block mt-2 text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full'>In Stock</span>
                           </div>
                         </div>
 
-                        {/* قیمت + کنترل تعداد */}
-                        <div className='flex justify-between w-full sm:w-5/12 sm:mt-0 mt-2'>
-                          <div className='sm:pl-4 pl-0'>
-                            <h2 className='text-lg text-orange-500'>$240</h2>
-                            <p className='line-through'>$300</p>
-                            <p>-15%</p>
+                        <div className='flex justify-between sm:justify-end items-center gap-6'>
+                          <div>
+                            <h2 className='text-xl font-extrabold text-emerald-600'>$240</h2>
+                            <p className='text-xs text-slate-400 line-through mt-1'>$300</p>
+                            <span className='text-xs font-bold text-red-500'>-15%</span>
                           </div>
-                          <div className='flex gap-2 flex-col'>
-                            <div className='flex bg-slate-200 h-[30px] justify-center items-center text-xl'>
-                              <div className='px-3 cursor-pointer'>-</div>
-                              <div className='px-3'>2</div>
-                              <div className='px-3 cursor-pointer'>+</div>
-                            </div>
-                            <button className='px-5 py-[3px] bg-red-500 text-white text-sm rounded-sm'>
-                              Delete
-                            </button>
+                          <div className='flex items-center bg-slate-50 border border-slate-200 rounded-xl h-10'>
+                            <button className='px-3 text-slate-500 hover:text-red-500'>−</button>
+                            <span className='px-2 text-sm font-bold text-slate-700'>2</span>
+                            <button className='px-3 text-slate-500 hover:text-emerald-600'>+</button>
                           </div>
+                          <button className='text-red-500 hover:bg-red-50 rounded-lg px-3 py-2 text-sm transition'>Delete</button>
                         </div>
                       </div>
                     ))}
@@ -232,35 +178,55 @@ const Shipping = () => {
               </div>
             </div>
 
-            {/* ---- ستون راست (خلاصه سفارش) ---- */}
             <div className='w-full lg:w-[33%]'>
-              <div className='pl-0 lg:pl-3 mt-4 lg:mt-0'>
-                <div className='bg-white p-4 text-slate-600 flex flex-col gap-3 rounded-md'>
-                  <h2 className='text-xl font-bold'>Order Summary</h2>
-                  <div className='flex justify-between items-center'>
-                    <span>Items Total (5)</span>
-                    <span>$343</span>
+              <div className='lg:sticky lg:top-6'>
+                <div className='bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-lg shadow-slate-200/50'>
+                  <div className='bg-gradient-to-br from-slate-900 to-emerald-900 p-6 text-white'>
+                    <p className='text-emerald-300 text-xs font-semibold uppercase tracking-widest'>Almost There</p>
+                    <h2 className='text-2xl font-extrabold mt-2'>Order Summary</h2>
+                    <p className='text-sm text-slate-300 mt-2'>Review your order before payment</p>
                   </div>
-                  <div className='flex justify-between items-center'>
-                    <span>Delivery Fee</span>
-                    <span>$40</span>
+
+                  <div className='p-5 flex flex-col gap-5'>
+                    <div className='flex justify-between items-center text-sm'>
+                      <span className='text-slate-500'>Items Total (5)</span>
+                      <span className='font-bold text-slate-800'>$343</span>
+                    </div>
+
+                    <div className='flex justify-between items-center text-sm'>
+                      <span className='text-slate-500'>Delivery Fee</span>
+                      <span className='font-bold text-slate-800'>$40</span>
+                    </div>
+
+                    <div className='flex justify-between items-center text-sm'>
+                      <span className='text-slate-500'>Total Payment</span>
+                      <span className='font-bold text-slate-800'>$450</span>
+                    </div>
+
+                    <div className='border-t border-dashed border-slate-200 pt-5'>
+                      <div className='flex justify-between items-center'>
+                        <span className='font-bold text-slate-800'>Total</span>
+                        <span className='text-2xl font-extrabold text-emerald-600'>$490</span>
+                      </div>
+                    </div>
+
+                    <button
+                      disabled={!res}
+                      className={`w-full py-4 px-5 rounded-xl text-sm font-bold uppercase flex items-center justify-between transition-all duration-300 ${
+                        res
+                          ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20'
+                          : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      }`}
+                    >
+                      <span>Place Order</span>
+                      <span className='text-xl'>→</span>
+                    </button>
+
+                    <div className='flex items-center justify-center gap-2 text-xs text-slate-400'>
+                      <span className='text-emerald-500'>🔒</span>
+                      Secure and encrypted checkout
+                    </div>
                   </div>
-                  <div className='flex justify-between items-center'>
-                    <span>Total Payment</span>
-                    <span>$450</span>
-                  </div>
-                  <div className='flex justify-between items-center'>
-                    <span>Total</span>
-                    <span className='text-lg text-[#059473]'>$490</span>
-                  </div>
-                  <button
-                    disabled={!res}
-                    className={`px-5 py-[6px] rounded-sm hover:shadow-red-500/50 hover:shadow-lg ${
-                      res ? 'bg-red-500' : 'bg-red-300'
-                    } text-sm text-white uppercase`}
-                  >
-                    Place Order
-                  </button>
                 </div>
               </div>
             </div>
