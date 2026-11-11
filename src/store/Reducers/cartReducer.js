@@ -21,10 +21,32 @@ export const get_cart_product = createAsyncThunk(
   "cart/get_cart_product",
   async (userId, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get(`/home/product/get-cart-product/${userId}`)
-         console.log("cart  Data ===> ", data );
+      const { data } = await api.get(
+        `/home/product/get-cart-product/${userId}`,
+      );
+      console.log("cart  Data ===> ", data);
       return fulfillWithValue(data);
     } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+// End ---------------------------------
+
+export const delete_cart_product = createAsyncThunk(
+  "products/delete_cart_product",
+  async (productId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.delete(`/home/product/delete-cart-product/${productId}`, {
+
+        withCredentials: true,
+      });
+      console.log("productId =>" , productId);
+      
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log("error ===> ", error.response.data);
       return rejectWithValue(error.response.data);
     }
   },
@@ -38,7 +60,7 @@ export const cartReducer = createSlice({
     wishlist_count: 0,
     wishlist: [],
     price: 0,
-    buy_product_item: '',
+    buy_product_item: "",
     shipping_fee: 0,
     outOfStockProduct: [],
     succsussMessage: "",
@@ -64,13 +86,13 @@ export const cartReducer = createSlice({
         state.cart_product_count = state.cart_product_count + 1;
         state.errorMessage = payload.error;
       })
+      // End -------------------------------------
 
       .addCase(get_cart_product.pending, (state) => {
         state.loader = true;
       })
       .addCase(get_cart_product.fulfilled, (state, { payload }) => {
         console.log(payload);
-        
         state.loader = false;
         state.cart_products = payload.cart_products;
         state.price = payload.price;
@@ -78,7 +100,6 @@ export const cartReducer = createSlice({
         state.shipping_fee = payload.shipping_fee;
         state.outOfStockProduct = payload.outofstock_products;
         state.buy_product_item = payload.buy_product_item;
-
         console.log(payload);
       })
       .addCase(get_cart_product.rejected, (state, { payload }) => {
@@ -87,10 +108,20 @@ export const cartReducer = createSlice({
         console.log(payload);
       })
 
+      // End -------------------------------------
 
-     
+      .addCase(delete_cart_product.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        state.loader = false;
+        state.succsussMessage = payload.message;
+      })
+      .addCase(delete_cart_product.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+        console.log(payload);
+      });
 
-
+    // End -------------------------------------
   },
 });
 

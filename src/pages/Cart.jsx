@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router";
 import { IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { get_cart_product } from "../store/Reducers/cartReducer";
+import { delete_cart_product, get_cart_product, messageClear } from "../store/Reducers/cartReducer";
+import toast from "react-hot-toast";
 
 const Card = () => {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ const Card = () => {
     cart_products,
     price,
     cart_product_count,
+    succsussMessage,
+    errorMessage,
     shipping_fee,
     outOfStockProduct,
     buy_product_item,
@@ -22,7 +25,21 @@ const Card = () => {
   useEffect(() => {
     dispatch(get_cart_product(userInfo?.id));
   }, []);
+  useEffect(() => {
+    if (succsussMessage) {
+      toast.success(succsussMessage);
+      dispatch(get_cart_product(userInfo.id));
 
+      dispatch(messageClear());
+    }
+  }, [succsussMessage]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [errorMessage]);
   const card_products = [1, 2];
   const redirect = () => {
     navigate("/shipping", {
@@ -34,6 +51,8 @@ const Card = () => {
       },
     });
   };
+
+  
 
   return (
     <div>
@@ -100,12 +119,14 @@ const Card = () => {
                               <div className="pl-4 sm:pl-0">
                                 <h2 className="text-lg text-orange-500">
                                   ${" "}
-                                  {(pt.productInfo.price -
+                                  {(
+                                    pt.productInfo.price -
                                     Math.floor(
                                       (pt.productInfo.price *
                                         pt.productInfo.discount) /
                                         100,
-                                    )).toLocaleString()}
+                                    )
+                                  ).toLocaleString()}
                                 </h2>
                                 {pt.productInfo.discount ? (
                                   <>
@@ -122,7 +143,7 @@ const Card = () => {
                                   <div className="px-3">{pt.quantity}</div>
                                   <div className="px-3 cursor-pointer">+</div>
                                 </div>
-                                <button className="px-5 py-[3px] bg-red-500 text-white">
+                                <button onClick={() => dispatch(delete_cart_product(pt._id))} className="px-5 py-[3px] bg-red-500 text-white">
                                   Delete
                                 </button>
                               </div>
@@ -168,9 +189,7 @@ const Card = () => {
                                     {p.price -
                                       Math.floor((p.price * p.discount) / 100)}
                                   </h2>
-                                  <p className="line-through">
-                                    $ {p.price}
-                                  </p>
+                                  <p className="line-through">$ {p.price}</p>
                                   <p>-{p.discount}%</p>
                                 </div>
                                 <div className="flex gap-2 flex-col">
@@ -200,7 +219,7 @@ const Card = () => {
                       <h2 className="text-xl font-bold">Order Summary</h2>
                       <div className="flex justify-between items-center">
                         <span>{buy_product_item} Items </span>
-                        <span>${(price).toLocaleString()} </span>
+                        <span>${price.toLocaleString()} </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span>Shipping Fee </span>
@@ -219,7 +238,9 @@ const Card = () => {
 
                       <div className="flex justify-between items-center">
                         <span>Total</span>
-                        <span className="text-lg text-[#059473]">${(price + shipping_fee).toLocaleString()} </span>
+                        <span className="text-lg text-[#059473]">
+                          ${(price + shipping_fee).toLocaleString()}{" "}
+                        </span>
                       </div>
                       <button
                         onClick={redirect}
