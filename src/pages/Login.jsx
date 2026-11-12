@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { FaFacebookF } from "react-icons/fa6";
 import { FaGoogle } from "react-icons/fa6";
-import { Link, replace, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { messageClear, user_login } from "../store/Reducers/authReducer";
@@ -11,7 +11,7 @@ import { messageClear, user_login } from "../store/Reducers/authReducer";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loader, succsussMessage, errorMessage, userInfo } = useSelector(
+  const {  succsussMessage, errorMessage, userInfo } = useSelector(
     (state) => state.auth,
   );
 
@@ -57,12 +57,8 @@ const Login = () => {
       <Header />
       <div className="bg-slate-200 mt-4 min-h-[calc(100vh-200px)]">
         <div className="w-full flex justify-center items-center px-4 py-6 sm:px-6 sm:py-8 lg:p-10">
-          {/*
-                      - موبایل: 1 ستون (فقط فرم)
-                      - تبلت به بالا: 2 ستون (فرم + تصویر)
-                    */}
+  
           <div className="grid grid-cols-1 md:grid-cols-2 w-full max-w-md md:max-w-3xl lg:max-w-5xl mx-auto bg-white rounded-md overflow-hidden shadow-sm">
-            {/* ستون فرم */}
             <div className="px-5 py-6 sm:px-8 sm:py-8">
               <h2 className="text-center w-full text-xl sm:text-2xl text-slate-600 font-bold mb-4">
                 Login
@@ -107,7 +103,6 @@ const Login = () => {
                   </button>
                 </form>
 
-                {/* جداکننده Or */}
                 <div className="flex justify-center items-center py-3 gap-2">
                   <div className="h-[1px] bg-slate-300 flex-1"></div>
                   <span className="px-2 text-sm text-slate-600 whitespace-nowrap">
@@ -144,7 +139,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* ستون تصویر - فقط از تبلت به بالا نمایش داده می‌شود */}
             <div className="hidden md:block w-full h-full p-4">
               <img
                 src="/images/login.jpg"

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { CiStar } from 'react-icons/ci';
 

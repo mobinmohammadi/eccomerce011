@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { get_category, get_products } from "../store/Reducers/homeReducers";
 import { get_user_info } from "../store/Reducers/authReducer";
-import { get_cart_product } from "../store/Reducers/cartReducer";
 
 const Home = () => {
   const distpatch = useDispatch();
@@ -19,7 +18,6 @@ const Home = () => {
     topRated_Product,
     discount_product,
   } = useSelector((state) => state.home);
-  const { userInfo } = useSelector((state) => state.auth);
   const { cart_products } = useSelector((state) => state.cart);
 
 
