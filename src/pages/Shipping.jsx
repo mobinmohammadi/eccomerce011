@@ -10,9 +10,9 @@ const Shipping = () => {
   let { state } = useLocation();
   console.log(state);
   const { items, price, products, shipping_fee } = state || {};
-  const dispatch = useDispatch()
-  const { userInfo } = useSelector(state => state.auth)
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const [res, setRes] = useState(false);
   const [form, setForm] = useState({
@@ -36,29 +36,28 @@ const Shipping = () => {
     e.preventDefault();
     const { name, address, phone, post, province, city, area } = form;
     if (name && address && phone && post && province && city && area) {
+
+      dispatch(
+        place_orders({
+          price,
+          products,
+          shipping_fee,
+          items,
+          shippingInfo: form,
+          userId: userInfo.id,
+          navigate,
+        }),
+      );
       setRes(true);
+      console.log("sd");
+      
+
     }
-
-    dispatch(place_orders({
-      price,
-      products,
-      shipping_fee,
-      items,
-      shippingInfo : form,
-      userId : userInfo,
-      navigate
-        }))
-
   };
 
   useEffect(() => {
-    console.log('state' , form);
-    
-  },[])
-
-
-
-
+    console.log("state", form);
+  }, []);
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -321,12 +320,13 @@ const Shipping = () => {
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-slate-800">Total</span>
                         <span className="text-2xl font-extrabold text-emerald-600">
-                          ${price +   shipping_fee}
+                          ${price + shipping_fee}
                         </span>
                       </div>
                     </div>
 
                     <button
+                    onClick={save}
                       disabled={!res}
                       className={`w-full py-4 px-5 rounded-xl text-sm font-bold uppercase flex items-center justify-between transition-all duration-300 ${
                         res
