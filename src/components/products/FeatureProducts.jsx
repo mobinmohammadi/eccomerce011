@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
@@ -7,6 +6,7 @@ import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   add_to_cart,
+  add_to_wish_list,
   messageClear,
 } from "../../store/Reducers/cartReducer";
 import toast from "react-hot-toast";
@@ -14,9 +14,7 @@ import toast from "react-hot-toast";
 const FeatureProducts = ({ products }) => {
   const [endIndex, setEndIndex] = useState(6);
 
-  const { succsussMessage, errorMessage } = useSelector(
-    (state) => state.cart
-  );
+  const { succsussMessage, errorMessage } = useSelector((state) => state.cart);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -48,11 +46,30 @@ const FeatureProducts = ({ products }) => {
           userId: userInfo.id,
           quantity: 1,
           productId,
-        })
+        }),
       );
     } else {
       navigate("/login");
     }
+  };
+
+
+
+  const addWishProduct = (pro) => {
+    const { _id, rating, discount, slug, price, name } = pro;
+    dispatch(
+      add_to_wish_list({
+        userId: userInfo.id,
+        productId: _id,
+        name,
+        price,
+        rating,
+        discount,
+        image: pro.images[0],
+        slug,
+      }),
+    );
+    console.log(pro);
   };
 
   const hasMore = products && endIndex < products.length;
@@ -88,10 +105,7 @@ const FeatureProducts = ({ products }) => {
               className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all duration-500 hover:-translate-y-2 hover:border-emerald-200 hover:shadow-[0_20px_50px_rgba(16,185,129,0.12)] sm:rounded-3xl"
             >
               <div className="relative overflow-hidden bg-gradient-to-br from-[#f8faf9] to-[#edf3ef]">
-                <Link
-                  to={`/product/details/new/${p._id}`}
-                  className="block"
-                >
+                <Link to={`/product/details/new/${p._id}`} className="block">
                   <img
                     className="h-[145px] w-full object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-110 sm:h-[220px] sm:p-6 md:h-[260px]"
                     src={p.images?.[0]}
@@ -112,6 +126,7 @@ const FeatureProducts = ({ products }) => {
 
                 <div className="absolute bottom-2 left-2 right-2 flex items-center gap-1.5 sm:bottom-4 sm:left-0 sm:right-0 sm:justify-center sm:gap-2">
                   <button
+                    onClick={() => addWishProduct(p)}
                     title="Add to wishlist"
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-slate-600 shadow-md transition-all duration-300 hover:bg-rose-500 hover:text-white sm:h-11 sm:w-11 sm:translate-y-8 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
                   >
@@ -119,7 +134,7 @@ const FeatureProducts = ({ products }) => {
                   </button>
 
                   <Link
-                    to={`/product/details/new/${p._id}`}
+                    to={`/product/details/new/${p.slug}`}
                     title="Quick view"
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-slate-600 shadow-md transition-all duration-300 hover:bg-emerald-600 hover:text-white sm:h-11 sm:w-11 sm:translate-y-8 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
                   >

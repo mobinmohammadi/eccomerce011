@@ -18,14 +18,11 @@ const Home = () => {
     topRated_Product,
     discount_product,
   } = useSelector((state) => state.home);
-  const { cart_products } = useSelector((state) => state.cart);
 
 
   useEffect(() => {
     distpatch(get_category());
     distpatch(get_products());
-    // distpatch(get_cart_product());
-    console.log(cart_products);
     
   }, []);
 

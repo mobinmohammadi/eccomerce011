@@ -8,6 +8,14 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CategoryShop from "./pages/CategoryShop";
 import SearchProducts from "./pages/SearchProducts";
+import Payment from "./pages/Payment";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import Index from "./components/dashboard/Index";
+import Orders from "./components/dashboard/myorders";
+import changePassword from "./components/dashboard/ChangePassword";
+import Wishlist from "./components/dashboard/wishList";
+import OrderDetails from "./components/dashboard/OrderDetails";
 
 let router = createBrowserRouter([
   {
@@ -28,17 +36,18 @@ let router = createBrowserRouter([
     Component: Shipping,
   },
   {
-    
+    path: "/payment",
+    Component: Payment,
+  },
+  {
     path: "/product/details/:slug",
     Component: Details,
   },
   {
-    
     path: "/products/?",
     Component: CategoryShop,
   },
-    {
-    
+  {
     path: "/products/search?",
     Component: SearchProducts,
   },
@@ -49,6 +58,38 @@ let router = createBrowserRouter([
   {
     path: "/register",
     Component: Register,
+  },
+
+  {
+    path: "/dashboard",
+    Component: ProtectedRoute,
+    children: [
+      {
+        Component: Dashboard,
+        children: [
+          {
+            index: true,
+            Component: Index,
+          },
+          {
+            path: "myorders",
+            Component: Orders,
+          },
+          {
+            path: "order-details/:orderId",
+            Component: OrderDetails,
+          },
+          {
+            path: "change-password",
+            Component: changePassword,
+          },
+          {
+            path: "wishlist",
+            Component: Wishlist,
+          },
+        ],
+      },
+    ],
   },
 ]);
 

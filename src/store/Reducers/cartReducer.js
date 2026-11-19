@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api/api";
-import { data } from "react-router";
 
 export const add_to_cart = createAsyncThunk(
   "cart/add_to_cart",
@@ -35,7 +34,7 @@ export const get_cart_product = createAsyncThunk(
 // End ---------------------------------
 
 export const delete_cart_product = createAsyncThunk(
-  "products/delete_cart_product",
+  "cart/delete_cart_product",
   async (productId, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.delete(
@@ -57,7 +56,7 @@ export const delete_cart_product = createAsyncThunk(
 // End ---------------------------------
 
 export const inccrement_product = createAsyncThunk(
-  "products/inccrement_product",
+  "cart/inccrement_product",
   async (cartId, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.put(`/home/product/quantity-inc/${cartId}`, {
@@ -76,13 +75,80 @@ export const inccrement_product = createAsyncThunk(
 // End ---------------------------------
 
 export const deccrement_product_quantity = createAsyncThunk(
-  "products/deccrement_product_quantity",
+  "cart/deccrement_product_quantity",
   async (cartId, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.put(`/home/product/quantity-dec/${cartId}`, {
         withCredentials: true,
       });
       console.log("productId =>", cartId);
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log("error ===> ", error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+// End ---------------------------------
+
+export const add_to_wish_list = createAsyncThunk(
+  "cart/add_to_wish_list",
+  async (infos, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(
+        `/costomer/product/add-wish-product`,
+        infos,
+        {
+          withCredentials: true,
+        },
+      );
+      console.log("productId =>", infos);
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log("error ===> ", error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+// End ---------------------------------
+
+export const get_products_in_wish = createAsyncThunk(
+  "cart/get_products_in_wish",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/costomer/product/get-products-in-wish`, {
+        withCredentials: true,
+      });
+      console.log("productId =>", data);
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log("error ===> ", error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+// End ---------------------------------
+
+export const delete_product_in_wish = createAsyncThunk(
+  "cart/delete_product_in_wish",
+  async (productId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(productId);
+    
+    try {
+      const { data } = await api.post(
+        `/costomer/product/delete-product-in-wish`,
+        productId,
+        {
+          withCredentials: true,
+        },
+      );
+      console.log("productId =>", data);
 
       return fulfillWithValue(data);
     } catch (error) {
@@ -140,13 +206,10 @@ export const cartReducer = createSlice({
         state.shipping_fee = payload.shipping_fee;
         state.outOfStockProduct = payload.outOfStockProduct;
         state.buy_product_item = payload.buy_product_item;
-        console.log(payload);
-        
       })
       .addCase(get_cart_product.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.error;
-        console.log(payload);
       })
 
       // End -------------------------------------
@@ -162,7 +225,6 @@ export const cartReducer = createSlice({
       .addCase(delete_cart_product.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.error;
-        console.log(payload);
       })
 
       // End -------------------------------------
@@ -179,7 +241,6 @@ export const cartReducer = createSlice({
       .addCase(inccrement_product.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.error;
-        console.log(payload);
       })
 
       // End -------------------------------------
@@ -189,11 +250,62 @@ export const cartReducer = createSlice({
       })
 
       .addCase(deccrement_product_quantity.fulfilled, (state, { payload }) => {
-        console.log(payload);
         state.loader = false;
         state.succsussMessage = payload.message;
       })
       .addCase(deccrement_product_quantity.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+
+      // End -------------------------------------
+
+      .addCase(add_to_wish_list.pending, (state) => {
+        state.loader = true;
+      })
+
+      .addCase(add_to_wish_list.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        state.loader = false;
+        state.succsussMessage = payload.message;
+        state.wishlist_count = payload.wishlistCount;
+      })
+      .addCase(add_to_wish_list.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+        console.log(payload);
+      })
+
+      // End -------------------------------------
+
+      .addCase(get_products_in_wish.pending, (state) => {
+        state.loader = true;
+      })
+
+      .addCase(get_products_in_wish.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.wishlist = payload.wishList;
+        state.wishlist_count = payload.wishlistCount;
+      })
+      .addCase(get_products_in_wish.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+
+      // End -------------------------------------
+
+      .addCase(delete_product_in_wish.pending, (state) => {
+        state.loader = true;
+      })
+
+      .addCase(delete_product_in_wish.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        state.loader = false;
+        state.wishlist = payload.wishList;
+        state.succsussMessage = payload.message;
+        state.wishlist_count = payload.wishlistCount;
+      })
+      .addCase(delete_product_in_wish.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.error;
         console.log(payload);

@@ -5,6 +5,8 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { place_orders } from "../store/Reducers/orderReducer";
+import { messageClear } from "../store/Reducers/orderReducer";
+import toast from "react-hot-toast";
 
 const Shipping = () => {
   let { state } = useLocation();
@@ -12,6 +14,9 @@ const Shipping = () => {
   const { items, price, products, shipping_fee } = state || {};
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
+  const { errorMessage, succsussMessage } = useSelector(
+    (state) => state.orders,
+  );
   const navigate = useNavigate();
 
   const [res, setRes] = useState(false);
@@ -36,28 +41,41 @@ const Shipping = () => {
     e.preventDefault();
     const { name, address, phone, post, province, city, area } = form;
     if (name && address && phone && post && province && city && area) {
-
-      dispatch(
-        place_orders({
-          price,
-          products,
-          shipping_fee,
-          items,
-          shippingInfo: form,
-          userId: userInfo.id,
-          navigate,
-        }),
-      );
       setRes(true);
-      console.log("sd");
-      
-
+    }
+    else{
+      toast.error("Place fill all fileds ")
     }
   };
 
+  const placeOrder = ()  =>{
+    if(!res) return
+        dispatch(
+      place_orders({
+        price,
+        products,
+        shipping_fee,
+        items,
+        shippingInfo: form,
+        userId: userInfo.id,
+        navigate,
+      }),
+    );
+    console.log("sd");
+  }
+
   useEffect(() => {
-    console.log("state", form);
-  }, []);
+    if (succsussMessage) {
+      toast.success(succsussMessage);
+      dispatch(messageClear());
+    }
+  }, [succsussMessage , dispatch]);
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [errorMessage , dispatch]);
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -101,7 +119,7 @@ const Shipping = () => {
                   </div>
 
                   {!res && (
-                    <form onSubmit={save}>
+                    <form onClick={save} >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-slate-600">
                         {[
                           {
@@ -326,7 +344,7 @@ const Shipping = () => {
                     </div>
 
                     <button
-                    onClick={save}
+                      onClick={placeOrder}
                       disabled={!res}
                       className={`w-full py-4 px-5 rounded-xl text-sm font-bold uppercase flex items-center justify-between transition-all duration-300 ${
                         res
