@@ -141,9 +141,9 @@ export const delete_product_in_wish = createAsyncThunk(
     console.log(productId);
     
     try {
-      const { data } = await api.post(
-        `/costomer/product/delete-product-in-wish`,
-        productId,
+      const { data } = await api.delete(
+        `/costomer/product/delete-product-in-wish/${productId}`,
+       
         {
           withCredentials: true,
         },

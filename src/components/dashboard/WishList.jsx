@@ -75,7 +75,7 @@ const Wishlist = () => {
           >
             <button
               onClick={() =>
-                dispatch(delete_product_in_wish({ productId: p._id }))
+                dispatch(delete_product_in_wish(p._id ))
               }
               type="button"
               aria-label="Remove from wishlist"
