@@ -11,7 +11,7 @@ import {
 } from "../../store/Reducers/cartReducer";
 import toast from "react-hot-toast";
 
-const Wishlist = () => {
+const WishList = () => {
   const dispatch = useDispatch();
   const { userinfo } = useSelector((state) => state.auth);
   const { wishlist, loader, succsussMessage, errorMessage } = useSelector(
@@ -159,4 +159,4 @@ const Wishlist = () => {
   );
 };
 
-export default Wishlist;
+export default WishList;
