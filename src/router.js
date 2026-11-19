@@ -15,7 +15,7 @@ import Index from "./components/dashboard/Index";
 import Orders from "./components/dashboard/myorders";
 import changePassword from "./components/dashboard/ChangePassword";
 import OrderDetails from "./components/dashboard/OrderDetails";
-import Wishlist from './components/dashboard/WishList';
+import Wishlist from './components/dashboard/wishList';
 
 let router = createBrowserRouter([
   {
