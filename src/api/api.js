@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const local = "http://localhost:5000";
-const production = 'https://backend-m6auqhuh7-jacks-projects-b193d194.vercel.app'
+const production = 'https://backend-exp-1-63ae.onrender.com'
 const api = axios.create({
   baseURL: `${production}/api`,
 });
