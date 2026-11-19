@@ -4,6 +4,8 @@ import api from "../../api/api";
 export const add_to_cart = createAsyncThunk(
   "cart/add_to_cart",
   async (info, { rejectWithValue, fulfillWithValue }) => {
+    console.log(info);
+    
     try {
       const { data } = await api.post("/home/product/add-to-cart", info, {
         withCredentials: true,

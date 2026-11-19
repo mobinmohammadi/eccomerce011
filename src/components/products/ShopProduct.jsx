@@ -30,7 +30,7 @@ const ShopProducts = ({ products, styles }) => {
             }`}
           >
             <Link
-              to={`/product/details/new/${p._id}`}
+              to={`/product/details/${p._id}`}
               className="block h-full w-full"
             >
               <img
@@ -61,7 +61,7 @@ const ShopProducts = ({ products, styles }) => {
               </button>
 
               <Link
-                to={`/product/details/new/${p._id}`}
+                to={`/product/details/${p._id}`}
                 title="Quick view"
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-600 shadow-md transition-all duration-300 hover:scale-110 hover:bg-emerald-600 hover:text-white"
               >
@@ -83,7 +83,7 @@ const ShopProducts = ({ products, styles }) => {
             }`}
           >
             <Link
-              to={`/product/details/new/${p._id}`}
+              to={`/product/details/${p._id}`}
               className="line-clamp-2 text-sm font-bold leading-6 text-slate-800 transition-colors duration-300 hover:text-emerald-600 sm:text-[15px]"
             >
               {p.name || "Product Name"}

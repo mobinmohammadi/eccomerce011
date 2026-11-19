@@ -105,7 +105,7 @@ const FeatureProducts = ({ products }) => {
               className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white transition-all duration-500 hover:-translate-y-2 hover:border-emerald-200 hover:shadow-[0_20px_50px_rgba(16,185,129,0.12)] sm:rounded-3xl"
             >
               <div className="relative overflow-hidden bg-gradient-to-br from-[#f8faf9] to-[#edf3ef]">
-                <Link to={`/product/details/new/${p._id}`} className="block">
+                <Link to={`/product/details/${p._id}`} className="block">
                   <img
                     className="h-[145px] w-full object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-110 sm:h-[220px] sm:p-6 md:h-[260px]"
                     src={p.images?.[0]}
@@ -134,7 +134,7 @@ const FeatureProducts = ({ products }) => {
                   </button>
 
                   <Link
-                    to={`/product/details/new/${p.slug}`}
+                    to={`/product/details/${p.slug}`}
                     title="Quick view"
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-slate-600 shadow-md transition-all duration-300 hover:bg-emerald-600 hover:text-white sm:h-11 sm:w-11 sm:translate-y-8 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
                   >
@@ -154,7 +154,7 @@ const FeatureProducts = ({ products }) => {
 
               <div className="flex flex-col gap-2 p-3 sm:gap-3 sm:p-5">
                 <Link
-                  to={`/product/details/new/${p._id}`}
+                  to={`/product/details/${p._id}`}
                   className="line-clamp-2 min-h-10 text-xs font-bold leading-5 text-slate-800 transition-colors duration-300 hover:text-emerald-600 sm:min-h-12 sm:text-[15px] sm:leading-6"
                 >
                   {p.name || "Product Name"}
