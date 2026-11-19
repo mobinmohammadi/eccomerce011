@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 const Products = ({ title, products }) => {
   const [prevEl, setPrevEl] = useState(null);
   const [nextEl, setNextEl] = useState(null);
+  
 
   const breakpoints = {
     0: { slidesPerView: 1, spaceBetween: 16 },
