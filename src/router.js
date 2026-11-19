@@ -15,7 +15,7 @@ import Index from "./components/dashboard/Index";
 import Orders from "./components/dashboard/myorders";
 import changePassword from "./components/dashboard/ChangePassword";
 import OrderDetails from "./components/dashboard/OrderDetails";
-import wishList from './components/dashboard/wishlist';
+import wishLists from "./components/dashboard/wishLists";
 
 let router = createBrowserRouter([
   {
@@ -85,7 +85,7 @@ let router = createBrowserRouter([
           },
           {
             path: "wishlist",
-            Component: wishList,
+            Component: wishLists,
           },
         ],
       },

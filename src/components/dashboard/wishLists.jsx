@@ -10,8 +10,7 @@ import {
   messageClear,
 } from "../../store/Reducers/cartReducer";
 import toast from "react-hot-toast";
-
-const wishList = () => {
+const wishLists = () => {
   const dispatch = useDispatch();
   const { userinfo } = useSelector((state) => state.auth);
   const { wishlist, loader, succsussMessage, errorMessage } = useSelector(
@@ -74,9 +73,7 @@ const wishList = () => {
             className="group relative overflow-hidden rounded-lg border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
           >
             <button
-              onClick={() =>
-                dispatch(delete_product_in_wish(p._id ))
-              }
+              onClick={() => dispatch(delete_product_in_wish(p._id))}
               type="button"
               aria-label="Remove from wishlist"
               className="absolute top-2 right-2 z-20 flex h-7 w-7 cursor-pointer items-center justify-center rounded-md bg-amber-600 text-white shadow-sm transition-colors duration-300 hover:bg-red-700"
@@ -159,4 +156,4 @@ const wishList = () => {
   );
 };
 
-export default wishList;
+export default wishLists;
