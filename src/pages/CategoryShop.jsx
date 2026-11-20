@@ -71,7 +71,8 @@ const CategoryShop = () => {
         pageNumber,
       }),
     );
-  }, [state, sortPrice, category, rating, pageNumber ,searchParams]);
+  }, [state, sortPrice, category, rating, pageNumber, searchParams]);
+
 
   return (
     <div className="bg-slate-50 min-h-screen">
