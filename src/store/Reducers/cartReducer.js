@@ -25,7 +25,6 @@ export const get_cart_product = createAsyncThunk(
       const { data } = await api.get(
         `/home/product/get-cart-product/${userId}`,
       );
-      console.log("cart  Data ===> ", data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -200,7 +199,6 @@ export const cartReducer = createSlice({
         state.loader = true;
       })
       .addCase(get_cart_product.fulfilled, (state, { payload }) => {
-        console.log(payload);
         state.loader = false;
         state.cart_products = payload.cart_products;
         state.price = payload.price;

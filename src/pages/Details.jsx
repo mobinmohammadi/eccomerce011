@@ -257,7 +257,7 @@ const Details = () => {
               <span className="pt-1">
                 <IoIosArrowForward />
               </span>
-              <Link to="/">Category</Link>
+              <Link to={`/products?category=${product.category}`}>{product.category}</Link>
               <span className="pt-1">
                 <IoIosArrowForward />
               </span>

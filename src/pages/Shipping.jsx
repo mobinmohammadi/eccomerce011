@@ -42,15 +42,14 @@ const Shipping = () => {
     const { name, address, phone, post, province, city, area } = form;
     if (name && address && phone && post && province && city && area) {
       setRes(true);
-    }
-    else{
-      toast.error("Place fill all fileds ")
+    } else {
+      toast.error("Place fill all fileds ");
     }
   };
 
-  const placeOrder = ()  =>{
-    if(!res) return
-        dispatch(
+  const placeOrder = () => {
+    if (!res) return;
+    dispatch(
       place_orders({
         price,
         products,
@@ -62,20 +61,20 @@ const Shipping = () => {
       }),
     );
     console.log("sd");
-  }
+  };
 
   useEffect(() => {
     if (succsussMessage) {
       toast.success(succsussMessage);
       dispatch(messageClear());
     }
-  }, [succsussMessage , dispatch]);
+  }, [succsussMessage, dispatch]);
   useEffect(() => {
     if (errorMessage) {
       toast.error(errorMessage);
       dispatch(messageClear());
     }
-  }, [errorMessage , dispatch]);
+  }, [errorMessage, dispatch]);
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -119,7 +118,7 @@ const Shipping = () => {
                   </div>
 
                   {!res && (
-                    <form onClick={save} >
+                    <form onClick={save}>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-slate-600">
                         {[
                           {

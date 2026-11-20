@@ -12,7 +12,6 @@ import {
 import toast from "react-hot-toast";
 const wishLists = () => {
   const dispatch = useDispatch();
-  const { userinfo } = useSelector((state) => state.auth);
   const { wishlist, loader, succsussMessage, errorMessage } = useSelector(
     (state) => state.cart,
   );

@@ -30,7 +30,7 @@ const ShopProducts = ({ products, styles }) => {
             }`}
           >
             <Link
-              to={`/product/details/${p._id}`}
+              to={`/product/details/${p.slug}`}
               className="block h-full w-full"
             >
               <img

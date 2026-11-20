@@ -39,7 +39,7 @@ const Categorys = ({ categoris }) => {
         {categoris?.map((c, i) => (
           <Link
             key={c._id || c.slug}
-            to={c.slug}
+            to={`/products?category=${c.slug}`}
             className={`group relative flex min-h-[210px] overflow-hidden rounded-[25px] ${
               backgrounds[i % backgrounds.length]
             } transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60`}

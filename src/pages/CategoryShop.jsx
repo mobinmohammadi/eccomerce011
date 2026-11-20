@@ -19,12 +19,6 @@ import {
 } from "../store/Reducers/homeReducers";
 
 const CategoryShop = () => {
-
-  const [ searchParams , setSearchParams ] = useSearchParams()
-  const category = searchParams.get("category")
-  
-
-
   const dispatch = useDispatch();
   const {
     products,
@@ -34,7 +28,6 @@ const CategoryShop = () => {
     latest_Product,
     parPage,
   } = useSelector((state) => state.home);
-  
 
   const [filter, setFilter] = useState(false);
   const [state, setState] = useState({
@@ -57,19 +50,28 @@ const CategoryShop = () => {
   const queryChangeCategory = (e, value) => {
     setCategory(e.target.checked ? value : "");
   };
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [category, setCategory] = useState();
+
+  useEffect(() => {
+    const category = searchParams.get("category");
+    setCategory(category);
+    console.log(category);
+  }, [searchParams]);
 
   useEffect(() => {
     dispatch(
       query_products({
-        low: state.values[0] || '',
-        high: state.values[1] || '',
+        low: state.values[0] || "",
+        high: state.values[1] || "",
         sortPrice,
         category,
         rating,
         pageNumber,
       }),
     );
-  }, [state, sortPrice, category, rating, pageNumber]);
+  }, [state, sortPrice, category, rating, pageNumber ,searchParams]);
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -80,7 +82,9 @@ const CategoryShop = () => {
         <div className="relative z-10 h-full flex flex-col justify-center px-8 md:px-16 text-white">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-3">Category</h1>
           <div className="flex items-center gap-2 text-sm text-slate-200">
-            <Link to="/" className="hover:text-white">Home</Link>
+            <Link to="/" className="hover:text-white">
+              Home
+            </Link>
             <IoIosArrowForward className="text-xs" />
             <span className="text-emerald-400 font-medium">Category</span>
           </div>
@@ -89,7 +93,6 @@ const CategoryShop = () => {
 
       <section className="py-10">
         <div className="w-[92%] lg:w-[90%] mx-auto">
-
           <div className="lg:hidden mb-5 flex gap-2">
             <button
               onClick={() => setFilter(true)}
@@ -101,13 +104,14 @@ const CategoryShop = () => {
           </div>
 
           <div className="flex flex-wrap gap-6">
-
             <aside
               className={`
                 lg:w-3/12 lg:block lg:relative
-                ${filter
-                  ? "fixed inset-0 z-50 w-full bg-black/40 lg:bg-transparent flex"
-                  : "hidden lg:block"}
+                ${
+                  filter
+                    ? "fixed inset-0 z-50 w-full bg-black/40 lg:bg-transparent flex"
+                    : "hidden lg:block"
+                }
               `}
             >
               <div
@@ -127,7 +131,6 @@ const CategoryShop = () => {
                 )}
 
                 <div className="lg:sticky lg:top-4 space-y-4">
-
                   <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
                     <h3 className="text-lg font-bold text-slate-800 mb-4 pb-3 border-b border-slate-100">
                       Category
@@ -210,7 +213,7 @@ const CategoryShop = () => {
                               <AiFillStar key={i} className="text-amber-400" />
                             ) : (
                               <CiStar key={i} className="text-slate-300" />
-                            )
+                            ),
                           )}
                         </button>
                       ))}
@@ -218,14 +221,16 @@ const CategoryShop = () => {
                   </div>
 
                   <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hidden lg:block">
-                    <Products title="Latest Product" products={latest_Product} />
+                    <Products
+                      title="Latest Product"
+                      products={latest_Product}
+                    />
                   </div>
                 </div>
               </div>
             </aside>
 
             <div className="flex-1 min-w-0 w-full">
-
               <div className="bg-white rounded-2xl px-5 py-3 mb-6 shadow-sm border border-slate-100 flex flex-wrap justify-between items-center gap-3">
                 <h2 className="text-slate-700">
                   <span className="font-bold text-emerald-600 text-lg">

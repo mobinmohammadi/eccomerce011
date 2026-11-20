@@ -41,9 +41,7 @@ const Payment = () => {
       if (paymentMethod === "stripe") {
         // 🔗 اینجا API واقعی Stripe رو صدا بزن:
         // const { data } = await api.post("/payment/stripe/create-session", { orderId, total });
-        // window.location.href = data.url; // redirect to Stripe Checkout
 
-        // برای دمو: شبیه‌سازی موفقیت
         await new Promise((r) => setTimeout(r, 1200));
 
         toast.success("Payment successful!");

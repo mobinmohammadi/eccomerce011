@@ -165,6 +165,8 @@ const HomeReducer = createSlice({
       .addCase(get_details_product.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.product = payload.product;
+        console.log(payload);
+        
         
       })
 
